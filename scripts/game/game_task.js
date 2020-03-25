@@ -237,7 +237,7 @@ class GameTaskManager extends GameManager {
       .append("&nbsp;")
       .append(
         $("<span>")
-          .addClass("color_sec")
+          .addClass("history")
           .append("(")
           .append(ENEXT.convertTimestamp(sector.Answer.AnswerDateTime.Value))
           .append("&nbsp;")
