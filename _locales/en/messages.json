@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "EN.CX Extension",
+    "message": "EN.CX Extension - test",
     "description": "Extension name"
   },
 
@@ -372,7 +372,7 @@
   },
 
   "menuBonuses": {
-    "message": "Bonus/penalty",
+    "message": "Bonus",
     "description": "Bonus and penalty menu button title"
   },
 
