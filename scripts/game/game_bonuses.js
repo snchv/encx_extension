@@ -93,8 +93,13 @@ class GameBonusManager extends GameManager {
       )
       .append(chrome.i18n.getMessage("bonusReward"))
       .append(
-        ENEXT.convertTime(bonus.AwardTime)
+        ENEXT.convertTime(bonus.AwardTime) + ", "
       )
+      .append(
+        $("<span>")
+        .addClass("color_bonus")
+        .append(bonus.Answer.Answer)
+	    )
       .append(")");
   }
 
@@ -133,6 +138,8 @@ class GameBonusManager extends GameManager {
           ? $("<div>")
               .addClass("bonus-task")
               .attr("id", `bonus-${bonus.BonusId}-task`)
+
+// Bonus in sandbox
               .append(
                 encx_tpl.iframeSandbox(
                   (bonus.Task || '').replace(/\r\n/g, "<br>")
@@ -159,7 +166,14 @@ class GameBonusManager extends GameManager {
         $("<div>")
           .addClass("bonus-task")
           .attr("id", `bonus-${bonus.BonusId}-task`)
-          .append((bonus.Task || '').replace(/\r\n/g, "<br>"))
+//          .append((bonus.Task || '').replace(/\r\n/g, "<br>"))
+
+// Bonus in sandbox
+              .append(
+                encx_tpl.iframeSandbox(
+                  (bonus.Task || '').replace(/\r\n/g, "<br>")
+                )
+              )
       );
   }
 
