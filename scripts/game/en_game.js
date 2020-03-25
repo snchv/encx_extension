@@ -28,11 +28,24 @@ var ENEXT = {
   // Convert Encounter timestamp to readable date
   convertTimestamp: function (ts, format='readable'){
     var d = new Date(ts);
-    d.setFullYear(d.getFullYear() - 1969);
+    // d.setFullYear(d.getFullYear() - 1969);
+    // d.setDate(d.getDate() + 1);
+
+    d.setDate(d.getDate() - 1969 * 365.2425);
+
+    var options = {
+//      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }
 
     switch (format){
       case 'readable':
-        return d.toLocaleString();
+        // return d.toLocaleString();
+        return d.toLocaleString("ru", options);
       case 'unix':
         return Math.round(d.getTime() / 1000);
     }
