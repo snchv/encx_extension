@@ -283,7 +283,7 @@ class GameTaskManager extends GameManager {
       )
       .append(
         $("<p>")
-          .append(level.Tasks[0].TaskTextFormatted)
+          .append(level.Tasks[0].TaskTextFormatted + "</div>")
       )
       .append(
         $("<div>")

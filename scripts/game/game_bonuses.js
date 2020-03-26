@@ -166,14 +166,7 @@ class GameBonusManager extends GameManager {
         $("<div>")
           .addClass("bonus-task")
           .attr("id", `bonus-${bonus.BonusId}-task`)
-//          .append((bonus.Task || '').replace(/\r\n/g, "<br>"))
-
-// Bonus in sandbox
-              .append(
-                encx_tpl.iframeSandbox(
-                  (bonus.Task || '').replace(/\r\n/g, "<br>")
-                )
-              )
+          .append((bonus.Task + "</div>" || '').replace(/\r\n/g, "<br>"))
       );
   }
 
