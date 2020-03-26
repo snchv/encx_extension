@@ -71,8 +71,8 @@ class Templates {
   historicActionTemplate(action){
     return $('<li>')
       .addClass(action.IsCorrect ? 'correct' : '' )
-      .attr('order', parseInt(action.EnterDateTime.Value))
-      .append(ENEXT.convertTimestamp(action.EnterDateTime.Value))
+      .css('order', -1 * ENEXT.convertTimestamp(action.EnterDateTime.Value, 'unix'))
+      .append(ENEXT.convertTimestamp(action.EnterDateTime.Value, 'encounter'))
       .append('&nbsp;')
       .append(
         $('<a>')

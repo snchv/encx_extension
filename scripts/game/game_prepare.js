@@ -247,14 +247,13 @@ class GamePrepare extends GameManager {
       $("#game-history-player").append(
         `<option value="All">${chrome.i18n.getMessage("titleAny")}</option>`
       );
-      var openDB = localDB.openIndexedDB();
-      openDB.onsuccess = function(){
+      localDB.openIndexedDB().then((openDB) => {
         var db = localDB.getStoreIndexedDB(openDB);
         var levels = $("#game-history-level").val() === "All"
           ? e.data.storage.getLevelIds()
           : [parseInt($("#game-history-level").val())];
         var added = [];
-        db.ind.user_id.openCursor(null, "next").onsuccess = function(event){
+        db.store.index("UserId").openCursor(null, "next").onsuccess = function(event){
           var cursor = event.target.result;
           if (cursor){
             if (
@@ -273,11 +272,10 @@ class GamePrepare extends GameManager {
             cursor.continue();
           }
         }
-      };
+      });
     }
 
-    var codeDB = localDB.openIndexedDB();
-    codeDB.onsuccess = function(){
+    localDB.openIndexedDB().then((codeDB) => {
       var db = localDB.getStoreIndexedDB(codeDB);
       var levels = $("#game-history-level").val() === "All"
         ? e.data.storage.getLevelIds()
@@ -315,9 +313,12 @@ class GamePrepare extends GameManager {
             );
           }
           cursor.continue();
+        } else {
+          // Scroll to top of history list
+          $("#game-history-codes").scrollTop(0);
         }
       }
-    }
+    });
   }
 
   _prepareHistoryDialog(){
