@@ -24,6 +24,26 @@ SOFTWARE.
 
 var tabId;
 
+function showMenuPage(pageName, saveData = true){
+  document.querySelectorAll("li").forEach((item) => {
+    var dp = item.getAttribute("data-page");
+    if (dp != null && dp != ""){
+      item.hidden = dp == pageName ? false : true;
+    }
+  });
+
+  document.querySelectorAll(`div.menu-button`).forEach((item) => {
+    item.classList.remove("active");
+    if (item.getAttribute("data-page") == pageName){
+      item.classList.add("active");
+    }
+  });
+
+  document.querySelector("#default-page-action-tab").value = pageName;
+
+  if (saveData) { saveValues(); }
+}
+
 function sendMessage(data, callback = undefined){
   chrome.tabs.query({
     active: true,
@@ -54,6 +74,8 @@ function initValues(data){
             break;
         }
       }
+
+      showMenuPage(data["default-page-action-tab"], false);
     }
   )
 }
@@ -69,7 +91,7 @@ function saveValues(){
   }
 
   // Collect numeric options
-  objects = document.querySelectorAll("li input[type=number]");
+  objects = document.querySelectorAll("li input[type=number], li input[type=hidden]");
   for (var key in objects){
     if (undefined !== objects[key].id)
       result[objects[key].id] = objects[key].value;
@@ -96,4 +118,10 @@ document.querySelectorAll("li input[type=checkbox]").forEach(function (object){
 });
 document.querySelectorAll("li input[type=number]").forEach(function (object){
   object.addEventListener("change", saveValues);
+});
+
+document.querySelectorAll("div.menu .menu-button").forEach(function (object){
+  object.addEventListener("click", (event) => {
+    showMenuPage(event.target.getAttribute("data-page"));
+  });
 });

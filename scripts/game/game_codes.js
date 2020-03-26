@@ -254,6 +254,9 @@ class GameCodesManager extends GameManager {
     // Do not focus if option is disabled
     if (!auto_focus) return;
 
+    // Do not focus if user is casting hotkey
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+
     if ($("#answer-box").is(":visible")){
       $("#answer-box #Answer").focus();
     } else if ($("#bonus-box").is(":visible")) {
@@ -272,10 +275,9 @@ class GameCodesManager extends GameManager {
   }
 
   _codeInput(e){
-    var codeDB = localDB.openIndexedDB();
-    codeDB.onsuccess = function(){
+    localDB.openIndexedDB().then((codeDB) => {
       var db = localDB.getStoreIndexedDB(codeDB);
-      var cur = db.ind.answer.openCursor(IDBKeyRange.only(e.target.value));
+      var cur = db.store.index("AnswerCaps").openCursor(IDBKeyRange.only(e.target.value.toUpperCase()));
       var found = undefined;
       cur.onsuccess = function(event){
         var cursor = event.target.result;
@@ -310,6 +312,6 @@ class GameCodesManager extends GameManager {
           }
         }
       };
-    };
+    });
   }
 };
