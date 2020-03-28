@@ -186,6 +186,9 @@ class GameBonusManager extends GameManager {
       .append(
         chrome.i18n.getMessage("bonusExpiredMessage")
       )
+      .append(
+        $("<div>").addClass("spacer")
+      )
   }
 
   _bonusWaitingTemplate(bonus){
