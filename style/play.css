@@ -75,22 +75,22 @@
 }
 
 a.logo {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   overflow: hidden;
 }
 
 a.logo img {
   width: 0;
   height: 0;
-  padding: 48px 48px 0px 0px
+  padding: 60px 60px 0px 0px
 }
 
 body.ff a.logo img {
-  background: url("moz-extension://__MSG_@@extension_id__/img/logo-48.png");
+  background: url("moz-extension://__MSG_@@extension_id__/img/logo-60.png");
 }
 body.gc a.logo img {
-  background: url("chrome-extension://__MSG_@@extension_id__/img/logo-48.png");
+  background: url("chrome-extension://__MSG_@@extension_id__/img/logo-60.png");
 }
 
 #game-history-download-csv {
@@ -220,4 +220,44 @@ div#level-stat-dialog iframe {
 	padding: 1em;
 	background-color: #426f42;
   color: #00ff00;
+}
+
+.titleTable {
+  width: 100%;
+  margin: auto;
+  border: none;
+}
+
+.noborder {
+  border: none;
+}
+
+.alignedRight {
+  text-align: right;
+}
+
+.normalText {
+  font-weight: normal;
+}
+
+.sector_info {
+  font-size: 100%;
+}
+
+a.dashed {
+  text-decoration:none;
+  border-bottom:1px dashed;
+  border-color:#808080;
+  margin-left: 10px;
+  color: #808080;
+  /* font-size: 85%; */
+}
+
+a.dashed:hover {
+  color: #b3b3b3;
+  border-bottom:0;
+}
+
+.rightButton {
+  display: none;
 }

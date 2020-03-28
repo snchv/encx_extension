@@ -279,7 +279,7 @@
   },
 
   "levelTitle": {
-    "message": "Уровень $NUM$ из $TOTAL$$NAME$",
+    "message": "Уровень <span>$NUM$</span> из $TOTAL$$NAME$",
     "description": "Заголовок уровня",
     "placeholders": {
       "num": {
@@ -295,12 +295,12 @@
   },
 
   "levelDuration": {
-    "message": "<b>Продолжительность уровня</b> $1",
+    "message": "Время уровня: <b>$1</b>",
     "description": "Длительность уровня"
   },
 
   "levelInfinite": {
-    "message": "<b>Уровень без автоперехода</b>",
+    "message": "Уровень без автоперехода",
     "description": "Уровень без автоперехода"
   },
 
@@ -310,7 +310,7 @@
   },
 
   "levelOnLevelTime": {
-    "message": "<strong>На уровне</strong> ",
+    "message": "На уровне: ",
     "description": "Время на уровне"
   },
 
@@ -320,7 +320,7 @@
   },
 
   "sectorsCount": {
-    "message": "На уровне <span id='sectors-total'>$TOTAL$</span> секторов [порог: $TRESHOLD$] <span class=color_sec>(осталось закрыть <span id='sectors-left'>$LEFT$</span>, <span id='sectors-speed'>$SPEED$</span>)</span>",
+    "message": "Секторов на уровне: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(порог: $TRESHOLD$, осталось: <span id='sectors-left'>$LEFT$</span>, <span id='sectors-speed'>$SPEED$</span>)</span>",
     "description": "Информация о количестве секторов",
     "placeholders": {
       "total": {
@@ -339,12 +339,12 @@
   },
 
   "sectorsSpeed": {
-    "message": "закрываем 1 сектор за $1",
+    "message": "закрываем сектор за $1",
     "description": "Скорость закрытия секторов"
   },
 
   "sectorsDisclosed": {
-    "message": "Незакрытые сектора: <span id='sectors-left-list'>$1</span>",
+    "message": "<span class=normalText>Незакрытые: <span id='sectors-left-list'>$1</span></span>",
     "description": "Список незакрытых секторов"
   },
 
