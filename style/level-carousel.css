@@ -1,4 +1,4 @@
-.level-block {
+/* .level-block {
   text-align: center;
   margin: 1px;
   min-height: 50px;
@@ -45,5 +45,50 @@
 
 #level-list {
   width: auto;
-  margin: 40px 20px; 
+  margin: 40px 20px;
+} */
+
+#level-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 101px);
+  padding-bottom: 40px;
+}
+
+.level-block {
+  cursor: pointer;
+}
+
+.level-block i {
+  color: #d8d8d8;
+}
+
+.level-block .line {
+  background-color: #d8d8d8;
+  opacity: 0.75;
+}
+
+.level-block.level-finished .line {
+  background-color: #494949;
+}
+
+.level-block.level-active .line {
+  background-color: #0f0;
+  opacity: 0.8;
+}
+
+.level-block p {
+  color: #d8d8d8;
+  margin: 5px 0;
+}
+
+.level-block:hover p {
+  color: #fff;
+}
+
+.level-block.level-finished p {
+  color: #656565;
+}
+
+.level-block.level-finished:hover p {
+  color: #8e8e8e;
 }
