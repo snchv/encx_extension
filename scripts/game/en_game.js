@@ -31,10 +31,10 @@ var ENEXT = {
     // d.setFullYear(d.getFullYear() - 1969);
     // d.setDate(d.getDate() + 1);
 
-    d.setDate(d.getDate() - 1969 * 365.2425);
+    d.setDate(d.getDate() - 1969 * 365.2425); // difference between Encounter server time and UNIX-time
 
     var options = {
-//      year: '2-digit',
+      // year: '2-digit',
       month: '2-digit',
       day: '2-digit',
       hour: 'numeric',
@@ -45,20 +45,33 @@ var ENEXT = {
     switch (format){
       case 'readable':
         return d.toLocaleString("ru", options);
+
       case 'encounter':
+        var today = new Date(Date.now());
         var time = `${d.getHours().toString().padStart(2, '0')}:` +
                    `${d.getMinutes().toString().padStart(2, '0')}:` +
                    `${d.getSeconds().toString().padStart(2, '0')}`;
         var date = `${d.getDate().toString().padStart(2, '0')}.` +
                    `${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-        var diff = Math.floor((Date.now() - d) / (1000*60*60*24)); // Measured in days
-        if (diff > 180){ // Show full date if more than 6 month ago
-          return `${date}.${d.getFullYear()} ${time}`;
-        } else if (diff > 0) { // Show day and month if more than 24 hours ago
-          return `${date} ${time}`;
+
+                   // var diff = Math.floor((Date.now() - d) / (1000*60*60*24)); // Measured in days
+                   // if (diff > 180){ // Show full date if more than 6 month ago
+                   //   return `${date}.${d.getFullYear()} ${time}`;
+                   // } else if (diff > 0) { // Show day and month if more than 24 hours ago
+                   //   return `${date} ${time}`;
+                   // } else { // Just Time
+                   //   return time;
+                   // }
+
+        var diff = Math.floor(today.getDate() - d.getDate()); // day difference from today
+        if (diff > 180) {
+          return `${date}.${d.getFullYear()}, ${time}`; // full date if more than 180 days
+        } else if (diff > 0) {
+          return `${date}, ${time}`; // day and month if later than yesterday
         } else { // Just Time
           return time;
         }
+
       case 'unix':
         return Math.round(d.getTime() / 1000);
     }

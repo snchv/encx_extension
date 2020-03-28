@@ -73,6 +73,7 @@ class Templates {
       .addClass(action.IsCorrect ? 'correct' : '' )
       .css('order', -1 * ENEXT.convertTimestamp(action.EnterDateTime.Value, 'unix'))
       .append(ENEXT.convertTimestamp(action.EnterDateTime.Value, 'encounter'))
+      // .append(ENEXT.convertTimestamp(action.EnterDateTime.Value, 'readable'))
       .append('&nbsp;')
       .append(
         $('<a>')
