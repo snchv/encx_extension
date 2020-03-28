@@ -27,9 +27,9 @@ var tabId;
 function showMenuPage(pageName, saveData = true){
   document.querySelectorAll("li").forEach((item) => {
     var dp = item.getAttribute("data-page");
-    if (dp != null && dp != ""){
-      item.hidden = dp == pageName ? false : true;
-    }
+    // if (dp != null && dp != ""){
+    //   item.hidden = dp == pageName ? false : true;
+    // }
   });
 
   document.querySelectorAll(`div.menu-button`).forEach((item) => {

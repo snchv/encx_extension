@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="page_action.css">
   </head>
 
-  <body>
+  <!-- <body>
 
   <div class=menu>
     <div class="menu-button" data-page="keys">🗝️</div>
@@ -109,5 +109,114 @@
   <script src="../scripts/common/localization.js"></script>
   <script src="page_action.js"></script>
 
+  </body> -->
+
+  <body>
+
+  <ul>
+    <li data-page="keys">
+      <h3 message-key="optionsTitleSectorsBonuses"></h3>
+      <hr>
+    </li>
+    <li data-page="keys" class="hidden">
+      <div>
+        <input id="hide-disclosed-sectors" type=checkbox>
+        <label for="hide-disclosed-sectors" message-key="optionsHideDisclosedSectors"> </label>
+      </div>
+    </li>
+    <li data-page="keys">
+      <div>
+        <input id="hide-complete-bonuses" type=checkbox>
+        <label for="hide-complete-bonuses" message-key="optionsHideCompleteBonuses"> </label>
+      </div>
+    </li>
+    <li data-page="keys">
+      <div>
+        <input id="show-complete-bonus-task" type=checkbox>
+        <label for="show-complete-bonus-task" message-key="optionsShowCompleteBonusTask"> </label>
+      </div>
+    </li>
+    <li data-page="keys" class="hidden">
+      <div>
+        <input id="show-complete-bonus-code" type=checkbox>
+        <label for="show-complete-bonus-code" message-key="optionsShowCompleteBonusCode"> </label>
+      </div>
+    </li>
+
+    <li data-page="notifications">
+      <h3 message-key="optionsNotifications"></h3>
+      <hr>
+    </li>
+    <li data-page="notifications">
+      <div>
+        <input id="enable-sound" type=checkbox>
+        <label for="enable-sound" message-key="optionsEnableSound"> </label>
+      </div>
+    </li>
+
+    <li data-page="engine">
+      <h3 message-key="optionsEngineOptions"></h3>
+      <hr>
+    </li>
+    <li data-page="engine">
+      <div>
+        <label for="refresh-rate" message-key="optionsRefreshRate">Text </label>
+        <input id="refresh-rate" type="number" min="3" max="60"> <span message-key="optionsSeconds"></span>
+      </div>
+    </li>
+    <li data-page="engine">
+      <div>
+        <input id="select-sent-code" type=checkbox>
+        <label for="select-sent-code" message-key="optionsSelectSentCode"></label>
+      </div>
+    </li>
+    <li data-page="engine">
+      <div>
+        <input id="auto-focus" type=checkbox>
+        <label for="auto-focus" message-key="optionsAutoFocus"> </label>
+      </div>
+    </li>
+    <li data-page="engine">
+      <div>
+        <input id="disable-chat" type=checkbox>
+        <label for="disable-chat" message-key="optionsDisableChat"> </label>
+      </div>
+    </li>
+    <li data-page="engine">
+      <div>
+        <input id="disable-domain" type=checkbox>
+        <label for="disable-domain" message-key="optionsDisableDomain"> </label>
+      </div>
+    </li>
+
+    <li data-page="contacts">
+      <h3 message-key="optionsContactUs"></h3>
+      <hr>
+    </li>
+    <li data-page="contacts">
+      <div class="contacts">
+        <a href="https://t.me/joinchat/A2oRolcWiCVcaGgePGdNPA" target="_blank">
+          <img src="/img/telegram-logo.png">
+          <span message-key="optionsTelegramChat"></span>
+        </a>
+      </div>
+    </li>
+    <li>
+      <div>
+        <input type=hidden id="default-page-action-tab">
+      </div>
+    </li>
+    <br>
+  </ul>
+
+  <script src="../scripts/common/localization.js"></script>
+  <script src="page_action.js"></script>
+
   </body>
+
+  <script src="../scripts/common/localization.js"></script>
+  <script src="page_action.js"></script>
+
+  </body>
+
 </html>

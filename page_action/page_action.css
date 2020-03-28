@@ -1,12 +1,12 @@
 body {
-  min-width: 40em;
+  min-width: 26em;
   padding: 0;
   margin: 0;
 }
 
 ul {
   list-style: none;
-  padding: 0;
+  padding: 0 1em;
   margin: 0;
 }
 
@@ -14,34 +14,54 @@ ul input {
   vertical-align: bottom;
 }
 
-ul label, ul span {
+ul label {
   vertical-align: middle;
   padding: 0 0.2em;
 }
 
-ul h3, ul div {
-  padding: 0.2em;
+ul span {
+  vertical-align: middle;
+  padding: 0 0.5em;
+}
+
+ul h3 {
+  padding: 0.5em 0 0 0;
+  margin: 0.5em 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+ul div {
+  padding: 0.2em 0;
   margin: 0;
   width: 100%;
   display: flex;
   align-items: center;
 }
 
-ul h3 {
-  background-color: lightgrey;
+.hidden {
+  display: none;
+}
+
+img {
+  position: relative;
+  /* измените эти значения */
+  top: 5px;
+  left: 5px;
 }
 
 .contacts {
-  text-align: center;
+  vertical-align: middle;
   display: block;
 }
 
-.contacts a {
+/* .contacts a {
   text-decoration: none;
   color: black;
-}
+} */
 
-div.menu {
+/* div.menu {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -69,4 +89,4 @@ div.menu .menu-button:hover {
 
 div.menu .menu-button.active {
   background-color: sandybrown;
-}
+} */
