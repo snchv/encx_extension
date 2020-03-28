@@ -64,8 +64,10 @@ class GameTaskManager extends GameManager {
 
   initialize(storage){
     $("div.content")
-      // .append(this._titleTemplate(storage.getGame()))
-      .append(!(storage.isStormGame()) ? this._titleTemplate(storage.getGame()) : "") // Level title if not a strom game
+      .append(this._titleTemplate(storage.getGame()))
+      // .append(!(storage.isStormGame())
+      //   ? this._titleTemplate(storage.getGame())
+      //   : this._titleTemplateStorm(storage.getGame())) // Level title if not a strom game
       .append(this._timeoutTemplate(storage.getLevel()))
       .append(this._sectorsTitleTemplate(storage.getLevel()))
       .append(this._sectorsTemplate(storage.getLevel()))
@@ -144,31 +146,25 @@ class GameTaskManager extends GameManager {
   }
 
   _titleTemplate(game){
-    return $("<div>")
-      .addClass("level-length")
+    return $("<div>").addClass("level-length")
       .append(
-        $("<table>")
-      .addClass("titleTable")
-      .append(
-        $("<td>")
-        .addClass("noborder")
-      .append(
-        $("<h2> content")
+        $("<table>").addClass("titleTable")
           .append(
-            chrome.i18n.getMessage(
-              "levelTitle",
-              [
-                game.Level.Number,
-                game.Levels.length,
-                game.Level.Name != "" ? `: ${game.Level.Name}`: ""
-              ]
+            $("<td>").addClass("noborder")
+            .append(
+              $("<h2> content")
+              .append(chrome.i18n.getMessage(
+                "levelTitle",
+                [
+                  game.Level.Number,
+                  game.Levels.length,
+                  game.Level.Name != "" ? `: ${game.Level.Name}`: ""
+                ])
+              )
             )
           )
-      )
-    )
       .append(
-        $("<td>")
-        .addClass("noborder alignedRight")
+        $("<td>").addClass("noborder alignedRight")
           .append(
             game.Level.Timeout > 0
               ? chrome.i18n.getMessage(
@@ -181,6 +177,26 @@ class GameTaskManager extends GameManager {
       )
       .append($("<div>").addClass("spacer"));
   }
+
+  _titleTemplateStorm(game){
+    return $("<div>").addClass("level-length")
+      .append(
+        $("<table>").addClass("titleTable")
+      .append(
+        $("<td>").addClass("noborder alignedRight")
+          .append(
+            game.Level.Timeout > 0
+              ? chrome.i18n.getMessage(
+                  "levelDuration",
+                  [ENEXT.convertTime(game.Level.Timeout)]
+                )
+              : chrome.i18n.getMessage("levelInfinite")
+          )
+        )
+      )
+      .append($("<div>").addClass("spacer"));
+  }
+
 
   _timeoutTemplate(level){
     if (level.TimeoutSecondsRemain == 0) return $("");
