@@ -31,7 +31,7 @@ chrome.runtime.onInstalled.addListener(
         "enableSound": true,
         "disableChat": false,
 
-        "hideDisclosedSectors": false,
+        "hideDisclosedSectors": true,
         "hideCompleteBonuses": false,
         "showCompleteBonusTask": false,
         "showCompleteBonusCode": false,

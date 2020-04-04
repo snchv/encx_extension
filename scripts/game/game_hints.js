@@ -79,26 +79,34 @@ class GameHintManager extends GameManager {
   }
 
   _bodyTemplate(hint){
-    if (!hint.IsPenalty) return $("<p>").append(hint.HelpText);
+    if (!hint.IsPenalty) return (`<p>${hint.HelpText}</p>`);
 
     return $("<p>")
-      .append(
-        $("<p>")
-          .append(
-            chrome.i18n.getMessage(
-              "hintPenaltyDescription",
-              [hint.PenaltyComment]
-            )
-          )
-          .append(
-            $("<div>").addClass("spacer")
-          )
-      )
-      .append(
-        hint.HelpText
-          ? hint.HelpText
-          : this._openPenaltyTemplate(hint)
-      );
+           .append(`<p>${chrome.i18n.getMessage(
+                   "hintPenaltyDescription",
+                   [hint.PenaltyComment])}</p><div class="spacer"></div>`)
+           .append(hint.HelpText
+                   ? (`${hint.HelpText}<wbr>`)
+                   : this._openPenaltyTemplate(hint)
+                  );
+
+      // .append(
+      //   $("<p>")
+      //     .append(
+      //       chrome.i18n.getMessage(
+      //         "hintPenaltyDescription",
+      //         [hint.PenaltyComment]
+      //       )
+      //     )
+      //     .append(
+      //       $("<div>").addClass("spacer")
+      //     )
+      // )
+      // .append(
+      //   hint.HelpText
+      //     ? hint.HelpText
+      //     : this._openPenaltyTemplate(hint)
+      // );
   }
 
   _openPenaltyTemplate(hint){

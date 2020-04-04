@@ -24,10 +24,14 @@ SOFTWARE.
 
 class GameBonusManager extends GameManager {
   initialize(storage){
-    $("div.content").append("<div id='bonuses'></div>");
+    $("div.content")
+    // .append( (storage.getBonuses().length > 0) ? this._titleBonusBlockTemplate() : "")
+    // .append($("<div>").addClass("spacer"))
+    .append("<div id='bonuses'></div>");
   }
 
   update(storage){
+
     this.hideBonuses = isOptionTrue(`${this.storage.getGameId()}-hide-complete-bonuses`);
     this.showBonusTask = isOptionTrue(`${this.storage.getGameId()}-show-complete-bonus-task`);
     this.showBonusCode = isOptionTrue(`${this.storage.getGameId()}-show-complete-bonus-code`);
@@ -58,15 +62,15 @@ class GameBonusManager extends GameManager {
     $(".bonus-block[delete-mark=true]").remove();
 
     // Bonuses on current level summary
-    $("li.enext-bonuses")
-      .attr(
-        "title",
-        chrome.i18n.getMessage(
-          "bonusesClosedSummary",
-          storage.getCompletedBonusesData()
-        )
-      )
-      .tooltip();
+    // $("li.enext-bonuses")
+    //   .attr(
+    //     "title",
+    //     chrome.i18n.getMessage(
+    //       "bonusesClosedSummary",
+    //       storage.getCompletedBonusesData()
+    //     )
+    //   )
+    //   .tooltip();
 
     // Adjust iframe sizes
     $("div#bonuses iframe").each(
@@ -79,12 +83,83 @@ class GameBonusManager extends GameManager {
     );
 
     this.hideBonuses ? $(".bonus-answered").hide() : $(".bonus-answered").show();
+
+
+    // update bonus summary info
+    if (storage.getBonuses().length > 0) {
+      $("#bonuses-closed").html(storage.getCompletedBonusesData()[0]);
+      $("#bonuses-closed-hidden").html(storage.getCompletedBonusesData()[0]);
+      $("#bonuses-total").html(storage.getBonuses().length);
+      $("#bonus-time").html(storage.getCompletedBonusesData()[1]);
+    }
+
   }
+
+  // _titleBonusBlockTemplate(){
+  //
+  //   // toggle closed bonuses
+  //   $(function() {
+  //     $('.toggle_closedBonuses').on('click', function() {
+  //
+  //       localStorage.setItem(
+  //         `${gameStorage.getGameId()}-hide-complete-bonuses`,
+  //         !isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)
+  //       );
+  //
+  //       $('.closedBonuses_toggle').toggle();
+  //       if (isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)) $(".bonus-answered").hide();
+  //       else $(".bonus-answered").show();
+  //
+  //       // gameStorage.update();
+  //       console.log('hide-complete-bonuses: ' + isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`));
+  //       return false;
+  //     });
+  //   });
+  //
+  //
+  //   return $("<div>").addClass("color_bonus bonusHeader")
+  //   // .attr("id", "sectors-left-list-block")
+  //   .append(
+  //     $("<h3>").addClass("color_bonus")
+  //     .append(chrome.i18n.getMessage(
+  //       "bonusBlockTitle",
+  //       [
+  //         this.storage.getCompletedBonusesData()[0],
+  //         this.storage.getBonuses().length,
+  //         this.storage.getCompletedBonusesData()[1],
+  //       ]
+  //     )
+  //     )
+  //
+  //     .append("&nbsp;&nbsp;")
+  //
+  //
+  //     .append(
+  //       $("<a>").addClass("dashed options toggle_closedBonuses")
+  //       .append(
+  //         $("<span>").addClass("closedBonuses_toggle").css('display', function() {
+  //           if (isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)) return 'none'
+  //           else return 'inline'
+  //         })
+  //         .append(chrome.i18n.getMessage("toggleClosedBonusesOff"))
+  //       )
+  //       .append(
+  //         $("<span>").addClass("closedBonuses_toggle").css('display', function() {
+  //           if (isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)) return 'inline'
+  //           else return 'none'
+  //         })
+  //         .append(chrome.i18n.getMessage(
+  //           "toggleClosedBonusesOn", [this.storage.getCompletedBonusesData()[0]]
+  //         ))
+  //       )
+  //       )
+  //   )
+  // }
 
   _bonusInfoTemplate(bonus){
     return $("<span>")
       .addClass("color_sec")
-      .append(`(${ENEXT.convertTimestamp(bonus.Answer.AnswerDateTime.Value)} `)
+      .append(`(${ENEXT.convertTimestamp(bonus.Answer.AnswerDateTime.Value, 'encounter')} `)
       .append(
         $("<a>")
           .attr("href", `/userdetails.aspx?uid=${bonus.Answer.UserId}`)
@@ -92,12 +167,9 @@ class GameBonusManager extends GameManager {
           .append(bonus.Answer.Login)
       )
       .append(chrome.i18n.getMessage("bonusReward"))
+      .append( ENEXT.convertTime(bonus.AwardTime) + ", ")
       .append(
-        ENEXT.convertTime(bonus.AwardTime) + ", "
-      )
-      .append(
-        $("<span>")
-        .addClass("color_bonus")
+        $("<span>").addClass("color_bonus")
         .append(bonus.Answer.Answer)
 	    )
       .append(")");
@@ -130,8 +202,8 @@ class GameBonusManager extends GameManager {
         $("<div>")
           .addClass("bonus-hint")
           .attr("id", `bonus-${bonus.BonusId}-hint`)
-          .append((bonus.Help || '').replace(/\r\n/g, "<br>"))
-      )
+          .append((bonus.Help) ? (`<p>${bonus.Help}</p>`).replace(/\r\n/g, "<br>") : "")
+        )
       .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
       .append(
         (this.showBonusTask && (bonus.Task || '').length > 0)
@@ -139,7 +211,7 @@ class GameBonusManager extends GameManager {
               .addClass("bonus-task")
               .attr("id", `bonus-${bonus.BonusId}-task`)
 
-// Bonus in sandbox
+      // Bonus in sandbox
               .append(
                 encx_tpl.iframeSandbox(
                   (bonus.Task || '').replace(/\r\n/g, "<br>")
@@ -166,7 +238,7 @@ class GameBonusManager extends GameManager {
         $("<div>")
           .addClass("bonus-task")
           .attr("id", `bonus-${bonus.BonusId}-task`)
-          .append((bonus.Task + "</div>" || '').replace(/\r\n/g, "<br>"))
+          .append((bonus.Task) ? (`<p>${bonus.Task}</p>`).replace(/\r\n/g, "<br>") : "")
       );
   }
 
@@ -221,14 +293,14 @@ class GameBonusManager extends GameManager {
           .addClass(bonus.IsAnswered ? "color_correct" : "color_bonus")
           .append(
             bonus.Name != null
-            ? chrome.i18n.getMessage(
+            ? `${chrome.i18n.getMessage(
                 "bonusNumberName",
                 [bonus.Number, bonus.Name]
-              )
-            : chrome.i18n.getMessage(
+              )}<wbr>`
+            : `${chrome.i18n.getMessage(
                 "bonusNumber",
                 [bonus.Number]
-              )
+              )}<wbr>`
           )
           .append(
             bonus.SecondsLeft > 0

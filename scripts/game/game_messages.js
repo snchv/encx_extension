@@ -70,9 +70,6 @@ class GameMessagesManager extends GameManager {
         $("<span>")
           .append(": ")
       )
-      .append(message.WrappedText)
-      .append(
-        $("<br>")
-      );
+      .append(`${message.WrappedText}<wbr>`);
   }
 }

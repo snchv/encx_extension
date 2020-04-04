@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "Расширение движка EN.CX - тест",
+    "message": "Расширение движка EN.CX - beta",
     "description": "Название расширения"
   },
 
@@ -115,6 +115,16 @@
     "description": "Заголовок группы настроек бонусов в меню"
   },
 
+  "toggleClosedBonusesOff": {
+    "message": "Скрыть выполненные",
+    "description": "Скрыть выполненные бонусы"
+  },
+
+  "toggleClosedBonusesOn": {
+    "message": "Показать выполненные (<span id='bonuses-closed-hidden'>$1</span>)",
+    "description": "Показать выполненные бонусы"
+  },
+
   "optionsGameHistoryDialog": {
     "message": "История кодов",
     "description": "Заголовок окна истории кодов"
@@ -184,7 +194,7 @@
   },
 
   "bonusNumber": {
-    "message": "Бонус $1",
+    "message": "Бонус $1&nbsp;",
     "description": "Слово 'Бонус' с номером"
   },
 
@@ -264,7 +274,7 @@
   },
 
   "hintPenaltyDescription": {
-    "message": "<b>Описание подсказки:</b> $1",
+    "message": "<span class=color_sec><i>Описание:</i></span> $1",
     "description": "Описание штрафной подсказки"
   },
 
@@ -294,13 +304,29 @@
     }
   },
 
+  "bonusBlockTitle": {
+    "message": "Бонусы: <span id='bonuses-closed'>$1</span>/<span id='bonuses-total'>$2</span> (<span id='bonus-time'>$3</span>)",
+    "description": "Заголовок бонусов"
+   },
+
+   "levelStart": {
+     "message": "Выдан: $1",
+     "description": "Время начала уровня"
+   },
+
+   "currentTime": {
+     "message": "Обновлено: $1",
+     "description": "Локальное время последнего обновления страницы"
+   },
+
+
   "levelDuration": {
-    "message": "Время уровня: <b>$1</b>",
+    "message": "Автопереход: $1",
     "description": "Длительность уровня"
   },
 
   "levelInfinite": {
-    "message": "Уровень без автоперехода",
+    "message": "Без автоперехода",
     "description": "Уровень без автоперехода"
   },
 
@@ -314,13 +340,22 @@
     "description": "Время на уровне"
   },
 
+  "levelIsPassed": {
+    "message": "Уровень пройден"
+  },
+
   "levelAutoUpPenalty": {
-    "message": "(штраф $1)",
+    "message": " (штраф $1)",
     "description": "Размер штрафа за автопереход"
   },
 
+  "levelAutoUpNoPenalty": {
+    "message": " (без штрафа)",
+    "description": "Без штрафа за автопереход"
+  },
+
   "sectorsCount": {
-    "message": "Секторов на уровне: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(порог: $TRESHOLD$, осталось: <span id='sectors-left'>$LEFT$</span>, <span id='sectors-speed'>$SPEED$</span>)</span>",
+    "message": "Секторов: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(порог: $TRESHOLD$, осталось закрыть <span id='sectors-left'>$LEFT$</span>) <span id='sectors-speed' class=color_dis>$SPEED$</span></span>",
     "description": "Информация о количестве секторов",
     "placeholders": {
       "total": {
@@ -339,12 +374,17 @@
   },
 
   "sectorsSpeed": {
-    "message": "закрываем сектор за $1",
+    "message": "&nbsp;закрываем сектор за $1",
     "description": "Скорость закрытия секторов"
   },
 
+  "sectorsToggle": {
+    "message": "Незакрытые сектора",
+    "description": "Настройка отображения незакрытых секторов"
+  },
+
   "sectorsDisclosed": {
-    "message": "<span class=normalText>Незакрытые: <span id='sectors-left-list'>$1</span></span>",
+    "message": "<span class=normalText>Не закрыты: <span id='sectors-left-list'>$1</span></span>",
     "description": "Список незакрытых секторов"
   },
 
@@ -395,6 +435,22 @@
   "menuBonuses": {
     "message": "Бонусы",
     "description": "Заголовок кнопки бонусов и штрафов в игровом меню"
+  },
+
+  "titleUserInfo": {
+    "message": "Мой профиль"
+  },
+
+  "titleUserLogin": {
+    "message": "Логин: "
+  },
+
+  "titleUserTeam": {
+    "message": "Команда: "
+  },
+
+  "titleGameForum": {
+    "message": "Обсуждение игры"
   },
 
   "engineErrorNeedRelogin": {

@@ -369,6 +369,11 @@ class GameStorage {
     return this.last.EngineAction;
   }
 
+  // return level start time
+  getStartTime(){
+    return this.last.Level.StartTime.Value;
+  }
+
   // Return level length
   getTimeout(){
     return this.last.Level.Timeout;

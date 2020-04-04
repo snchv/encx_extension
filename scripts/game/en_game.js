@@ -25,29 +25,27 @@ SOFTWARE.
 var gameStorage = null;
 
 var ENEXT = {
-  // Convert Encounter timestamp to readable date
+
+  // Convert Encounter timestamp (milliseconds since 01-01-0001 00:00:00) to readable date
   convertTimestamp: function (ts, format='readable'){
     var d = new Date(ts);
     // d.setFullYear(d.getFullYear() - 1969);
     // d.setDate(d.getDate() + 1);
-
-    d.setDate(d.getDate() - 1969 * 365.2425); // difference between Encounter server time and UNIX-time
-
-    var options = {
-      // year: '2-digit',
-      month: '2-digit',
-      day: '2-digit',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric'
-    }
+    d.setDate(d.getDate() - 1969 * 365.2425); // difference between Encounter server time and local UTC
 
     switch (format){
       case 'readable':
+        var options = {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+        }
         return d.toLocaleString("ru", options);
 
       case 'encounter':
-        var today = new Date(Date.now());
         var time = `${d.getHours().toString().padStart(2, '0')}:` +
                    `${d.getMinutes().toString().padStart(2, '0')}:` +
                    `${d.getSeconds().toString().padStart(2, '0')}`;
@@ -63,11 +61,14 @@ var ENEXT = {
                    //   return time;
                    // }
 
-        var diff = Math.floor(today.getDate() - d.getDate()); // day difference from today
+        var today = new Date();
+        var diff = Math.floor((today - d) / (1000*60*60*24)); // Measured in days
+        var diffdate = Math.abs(Math.floor(today.getDate() - d.getDate())); // difference of dates
+
         if (diff > 180) {
           return `${date}.${d.getFullYear()}, ${time}`; // full date if more than 180 days
-        } else if (diff > 0) {
-          return `${date}, ${time}`; // day and month if later than yesterday
+        } else if (diffdate > 0) {
+          return `${date} ${time}`; // day and month if later than yesterday
         } else { // Just Time
           return time;
         }
@@ -77,8 +78,50 @@ var ENEXT = {
     }
   },
 
-  currentTimestamp: function (){
-    return Math.round(new Date().getTime() / 1000);
+  convertTimestampUTC: function (ts){
+    var n = new Date(ts);
+    var options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }
+    return n.toLocaleString("ru", options);
+  },
+
+  // current timestamp in seconds and timezone offset
+  currentTimestamp: function (format='local'){
+    var ct = new Date();
+
+    var options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }
+
+    switch (format) {
+
+  // local time
+      case 'local':
+        return Math.round(ct.getTime() / 1000);
+
+  // UTC+0 time
+      case 'UTC':
+        return Math.round((ct.getTime() + ct.getTimezoneOffset()*60*1000)/1000);
+
+      case 'offset':
+        if (ct.getTimezoneOffset() <= 0) {return 'UTC+' + Math.abs(ct.getTimezoneOffset()/60);}
+        else return 'UTC-' + ct.getTimezoneOffset()/60;
+
+      case 'readable':
+        return ct.toLocaleString("ru", options);
+
+    }
   },
 
   parseBoolean:function (value, bydefault = false){
@@ -95,32 +138,62 @@ var ENEXT = {
   },
 
   // Split value in seconds into D H:M:S
-  convertTime: function(sec){
+  convertTime: function(sec, format='common'){
     var result = "";
 
-    if (sec % 60 > 0){
-      result = chrome.i18n.getMessage("timeSec", [sec%60]);
+    switch (format) {
+      case 'common':
+        if (sec % 60 > 0){
+          result = chrome.i18n.getMessage("timeSec", [sec%60]);
+        }
+        sec = Math.floor(sec / 60);
+
+        if (sec % 60 > 0){
+          result = chrome.i18n.getMessage("timeMin", [sec%60, result]);
+        }
+        sec = Math.floor(sec / 60);
+
+        if (sec % 24 > 0){
+          result = chrome.i18n.getMessage("timeHour", [sec%24, result]);
+        }
+        sec = Math.floor(sec / 24);
+
+        if (sec > 0){
+          result = chrome.i18n.getMessage("timeDay", [sec, result]);
+        }
+
+        if (result === "")
+          result = chrome.i18n.getMessage("timeSec", [0]);
+
+        return $.trim(result);
+
+      case 'timer':
+        function pad(n){return n<10 ? '0'+n : n}
+
+        if (sec % 60 >= 0){
+          result = chrome.i18n.getMessage("timeSec", pad([sec%60]));
+        }
+        sec = Math.floor(sec / 60);
+
+        if (sec % 60 >= 0){
+          result = chrome.i18n.getMessage("timeMin", [sec%60, result]);
+        }
+        sec = Math.floor(sec / 60);
+
+        if (sec % 24 > 0){
+          result = chrome.i18n.getMessage("timeHour", [sec%24, result]);
+        }
+        sec = Math.floor(sec / 24);
+
+        if (sec > 0){
+          result = chrome.i18n.getMessage("timeDay", [sec, result]);
+        }
+
+        if (result === "")
+          result = chrome.i18n.getMessage("timeSec", [0]);
+
+        return $.trim(result);
     }
-    sec = Math.floor(sec / 60);
-
-    if (sec % 60 > 0){
-      result = chrome.i18n.getMessage("timeMin", [sec%60, result]);
-    }
-    sec = Math.floor(sec / 60);
-
-    if (sec % 24 > 0){
-      result = chrome.i18n.getMessage("timeHour", [sec%24, result]);
-    }
-    sec = Math.floor(sec / 24);
-
-    if (sec > 0){
-      result = chrome.i18n.getMessage("timeDay", [sec, result]);
-    }
-
-    if (result === "")
-      result = chrome.i18n.getMessage("timeSec", [0]);
-
-    return $.trim(result);
   }
 };
 
@@ -131,7 +204,7 @@ function updateTimers(){
 
     if (!sec) gameStorage.markForUpdate();
 
-    $(this).html(ENEXT.convertTime(sec));
+    $(this).html(ENEXT.convertTime(sec,'timer'));
     $(this).attr("seconds-left", sec);
   });
 
@@ -154,7 +227,7 @@ $(function(){
       'refreshRate': 5,
       'disableChat': false,
 
-      'hideDisclosedSectors': false,
+      'hideDisclosedSectors': true,
       'hideCompleteBonuses': false,
       'showCompleteBonusTask': false,
       'showCompleteBonusCode': false,

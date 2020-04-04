@@ -48,30 +48,31 @@ class GameTaskManager extends GameManager {
   }
 
   _sectorsClosingSpeed(storage){
+    var sec_speed = Math.round(
+      (ENEXT.currentTimestamp() - ENEXT.convertTimestamp(storage.getLevel().StartTime.Value, "unix")) / storage.getSectorsClosedNumber()
+    );
+
+    if (sec_speed <= 0) return "";
+
     return storage.getSectorsClosedNumber() > 0
-      ? chrome.i18n.getMessage(
-          "sectorsSpeed",
-          [
-            ENEXT.convertTime(
-              Math.round(
-                (ENEXT.currentTimestamp() - ENEXT.convertTimestamp(storage.getLevel().StartTime.Value, "unix")) / storage.getSectorsClosedNumber()
-              )
-            )
-          ]
-        )
-      : "∞"
+      ? chrome.i18n.getMessage("sectorsSpeed", [ENEXT.convertTime(sec_speed)])
+      : ""
   }
 
   initialize(storage){
     $("div.content")
-      .append(this._titleTemplate(storage.getGame()))
-      // .append(!(storage.isStormGame())
-      //   ? this._titleTemplate(storage.getGame())
-      //   : this._titleTemplateStorm(storage.getGame())) // Level title if not a strom game
+      // .append(this._titleTemplate(storage.getGame(), storage.getLevel()))
+
+      // do not show level title if storm game
+      .append(storage.isStormGame() ? "" : this._titleTemplate(storage.getGame()))
+      .append(storage.isStormGame() ? "" : $("<div>").addClass("spacer"))
+
       .append(this._timeoutTemplate(storage.getLevel()))
+
       .append(this._sectorsTitleTemplate(storage.getLevel()))
       .append(this._sectorsTemplate(storage.getLevel()))
-      .append($("<div>").addClass("spacer"))
+      .append((storage.getSectorNumber() < 2) ? "" : $("<div>").addClass("spacer"))
+
       .append(this._taskTemplate(storage.getLevel()));
 
     this.task = storage.getTaskText();
@@ -79,6 +80,7 @@ class GameTaskManager extends GameManager {
   }
 
   update(storage){
+
     var start_ts = ENEXT.convertTimestamp(storage.getLevel().StartTime.Value, "unix");
     var curr_ts = ENEXT.currentTimestamp();
 
@@ -91,14 +93,29 @@ class GameTaskManager extends GameManager {
     }
 
     // Update timeout data
-    if (storage.getTimeoutSecondsRemain() > 0){
+    // if (storage.getTimeoutSecondsRemain() > 0){
+    //   $("#timeout-block .countdown-timer.backward")
+    //     .attr("seconds-left", storage.getTimeoutSecondsRemain());
+    //     $("#timeout-block .countdown-timer.forward")
+    //       .attr("seconds-left", storage.getTimeout() - storage.getTimeoutSecondsRemain());
+    // } else if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
+    //   $("#timeout-block")
+    //     .replaceWith(this._timeoutTemplate(storage.getLevel()));
+    // }
+
+    // if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
+
+    if (storage.isLevelUp()) {
+      $("#timeout-block")
+        .replaceWith(this._timeoutTemplate(storage.getLevel()));
+    } else  if (storage.getTimeoutSecondsRemain() == 0){
+        $("#timeout-block .countdown-timer.forward")
+          .attr("seconds-left", ENEXT.currentTimestamp('local') - ENEXT.convertTimestamp(storage.getStartTime(), 'unix'));
+    } else if (storage.getTimeoutSecondsRemain() > 0){
       $("#timeout-block .countdown-timer.backward")
         .attr("seconds-left", storage.getTimeoutSecondsRemain());
         $("#timeout-block .countdown-timer.forward")
           .attr("seconds-left", storage.getTimeout() - storage.getTimeoutSecondsRemain());
-    } else if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
-      $("#timeout-block")
-        .replaceWith(this._timeoutTemplate(storage.getLevel()));
     }
 
     // Update sectors header
@@ -145,101 +162,57 @@ class GameTaskManager extends GameManager {
     }
   }
 
-  _titleTemplate(game){
+  _titleTemplate(game, level){
     return $("<div>").addClass("level-length")
       .append(
-        $("<table>").addClass("titleTable")
-          .append(
-            $("<td>").addClass("noborder")
-            .append(
-              $("<h2> content")
-              .append(chrome.i18n.getMessage(
-                "levelTitle",
-                [
-                  game.Level.Number,
-                  game.Levels.length,
-                  game.Level.Name != "" ? `: ${game.Level.Name}`: ""
-                ])
-              )
-            )
-          )
-      .append(
-        $("<td>").addClass("noborder alignedRight")
-          .append(
-            game.Level.Timeout > 0
-              ? chrome.i18n.getMessage(
-                  "levelDuration",
-                  [ENEXT.convertTime(game.Level.Timeout)]
-                )
-              : chrome.i18n.getMessage("levelInfinite")
-          )
+        $("<h2> content")
+        .append(chrome.i18n.getMessage(
+          "levelTitle",
+          [
+            game.Level.Number,
+            game.Levels.length,
+            game.Level.Name != "" ? `: ${game.Level.Name}`: ""
+          ])
         )
-      )
-      .append($("<div>").addClass("spacer"));
-  }
+      );
 
-  _titleTemplateStorm(game){
-    return $("<div>").addClass("level-length")
-      .append(
-        $("<table>").addClass("titleTable")
-      .append(
-        $("<td>").addClass("noborder alignedRight")
-          .append(
-            game.Level.Timeout > 0
-              ? chrome.i18n.getMessage(
-                  "levelDuration",
-                  [ENEXT.convertTime(game.Level.Timeout)]
-                )
-              : chrome.i18n.getMessage("levelInfinite")
-          )
-        )
-      )
-      .append($("<div>").addClass("spacer"));
-  }
+            // // level start time
+            // .append(
+            //   $("<span>").addClass("color_dis").css("white-space", "nowrap")
+            //   .append(chrome.i18n.getMessage("levelStart", [ENEXT.convertTimestamp(level.StartTime.Value, 'readable')]))
+            // )
 
+          // // level timeout
+          // .append(
+          //   $("<li>").addClass("color_sec")
+          //   .append(
+          //     game.Level.Timeout > 0
+          //       ? chrome.i18n.getMessage("levelDuration", [ENEXT.convertTime(game.Level.Timeout)])
+          //       : chrome.i18n.getMessage("levelInfinite")
+          //   )
+          // )
+        // .append($("<div>").addClass("spacer"));
+  }
 
   _timeoutTemplate(level){
-    if (level.TimeoutSecondsRemain == 0) return $("");
 
-    return $("<h3>")
-      .addClass("timer")
-      .attr("id", "timeout-block")
+    if (level.IsPassed) return "";
+    if (level.TimeoutSecondsRemain == 0) return "";
 
+    // level duration if timeout is set
+    return $("<h3>").addClass("timer").attr("id", "timeout-block")
+      .append(chrome.i18n.getMessage("levelAutoUp"))
       .append(
-        $("<table>")
-        .addClass("titleTable")
-        .append(
-          $("<td>")
-          .addClass("noborder")
-          .append(chrome.i18n.getMessage("levelAutoUp"))
-          .append(
-            $("<span>")
-              .addClass("countdown-timer backward")
-              .attr("seconds-left", level.TimeoutSecondsRemain)
-              .append(ENEXT.convertTime(level.TimeoutSecondsRemain))
-          )
-          .append(" ")
-          .append(
-            level.TimeoutAward != 0
-              ? chrome.i18n.getMessage(
-                  "levelAutoUpPenalty",
-                  [ENEXT.convertTime(-1*level.TimeoutAward)]
-                )
-              : ""
-          )
-        )
-        .append(
-          $("<td>")
-          .addClass("noborder alignedRight")
-          .append(chrome.i18n.getMessage("levelOnLevelTime"))
-          .append(
-            $("<span>")
-              .addClass("countdown-timer forward")
-              .attr("seconds-left", level.Timeout - level.TimeoutSecondsRemain)
-              .attr("seconds-step", +1)
-              .append(ENEXT.convertTime(level.Timeout - level.TimeoutSecondsRemain))
-          )
-        )
+        $("<span>")
+          .addClass("countdown-timer backward")
+          .attr("seconds-left", level.TimeoutSecondsRemain)
+          .append(ENEXT.convertTime(level.TimeoutSecondsRemain, 'timer'))
+      )
+      .append(" ")
+      .append(
+        level.TimeoutAward != 0
+          ? chrome.i18n.getMessage("levelAutoUpPenalty", [ENEXT.convertTime(-1*level.TimeoutAward)])
+          : chrome.i18n.getMessage("levelAutoUpNoPenalty")
       )
       .append($("<div>").addClass("spacer"));
   }
@@ -249,44 +222,54 @@ class GameTaskManager extends GameManager {
 
     // toggle not closed sectors
     $(function() {
-      $('.toggle').on("click", function() {
-        if ( localStorage.getItem(`${gameStorage.getGameId()}-hide-disclosed-sectors`) == "true") {
-          localStorage.setItem(`${gameStorage.getGameId()}-hide-disclosed-sectors`, false);
-        } else {
-          localStorage.setItem(`${gameStorage.getGameId()}-hide-disclosed-sectors`, true);
-        }
-        $(this).siblings(".rightButton").toggle();
+      $('.toggle_disclosedSectors').on('click', function() {
+
+        localStorage.setItem(
+          `${gameStorage.getGameId()}-hide-disclosed-sectors`,
+          !isOptionTrue(`${gameStorage.getGameId()}-hide-disclosed-sectors`)
+        );
+
+        $('.disclosed_sectors').toggle();
+        if (isOptionTrue(`${gameStorage.getGameId()}-hide-disclosed-sectors`)) $("#sectors-left-list-block").hide();
+        else $("#sectors-left-list-block").show();
+
+        // gameStorage.update();
+        console.log('hide-disclosed-sectors: ' + isOptionTrue(`${gameStorage.getGameId()}-hide-disclosed-sectors`));
+        return false;
       });
     });
 
-    return $("<h3>")
+    return $("<div>").addClass("pad")
     .append(
-      chrome.i18n.getMessage(
-        "sectorsCount",
-        [
-          level.Sectors.length,
-          this.storage.getSectorsToClose(),
-          level.SectorsLeftToClose,
-          // Code closing speed
-          this._sectorsClosingSpeed(this.storage)
-        ]
-      )
-    )
-
-    // toggle link
-    .append(
-      $("<a>").addClass("dashed normalText toggle")
-      .append("Незакрытые сектора")
-    )
-
-    // toggle Block
-    .append(
-      $("<div>").addClass("rightButton")
-        .attr("id", "sectors-left-list-block")
-        .append(chrome.i18n.getMessage("sectorsDisclosed",[this._openSectorList(level.Sectors)]))
+      $("<h3>")
+      .append(
+        chrome.i18n.getMessage(
+          "sectorsCount",
+          [
+            level.Sectors.length,
+            this.storage.getSectorsToClose(),
+            level.SectorsLeftToClose,
+            // Code closing speed
+            this._sectorsClosingSpeed(this.storage)
+          ]
+        )
       )
 
-    .append($("<div>").addClass("spacer"));
+      // toggle link
+      .append("&nbsp;&nbsp;")
+      .append(
+        $("<a>").addClass("dashed options toggle_disclosedSectors")
+        .append(chrome.i18n.getMessage("sectorsToggle"))
+      )
+
+      // toggle Block
+      .append(
+        $("<div>").addClass('disclosed_sectors').css("font-weight", "normal")
+          .attr("id", "sectors-left-list-block")
+          .append(chrome.i18n.getMessage("sectorsDisclosed",[this._openSectorList(level.Sectors)]))
+        )
+    )
+
   }
 
   _sectorsTemplate(level){
@@ -301,9 +284,9 @@ class GameTaskManager extends GameManager {
       .append("&nbsp;")
       .append(
         $("<span>")
-          .addClass("color_sec sector_info")
+          .addClass("color_sec")
           .append("(")
-          .append(ENEXT.convertTimestamp(sector.Answer.AnswerDateTime.Value))
+          .append(ENEXT.convertTimestamp(sector.Answer.AnswerDateTime.Value, 'encounter'))
           .append("&nbsp;")
           .append(
             $("<a>")
@@ -343,12 +326,12 @@ class GameTaskManager extends GameManager {
 
     return result
       .append(
-        $("<h3>").append(chrome.i18n.getMessage("titleTask"))
+        $("<div>").addClass("pad")
+        .append(
+          $("<h3>").append(chrome.i18n.getMessage("titleTask"))
+        )
       )
-      .append(
-        $("<p>")
-          .append(level.Tasks[0].TaskTextFormatted + "</div>")
-      )
+      .append(`<p>${level.Tasks[0].TaskTextFormatted}</p>`)
       .append($("<div>").addClass("spacer"))
       .append(encx_tpl.documentWriteRollback());
   }

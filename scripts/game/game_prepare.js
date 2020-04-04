@@ -33,8 +33,9 @@ class GamePrepare extends GameManager {
     );
 
     // Prepare game menu
-    $(".header li.mail").remove();
-    $(".header li.discuss a").attr("target", "_blank");
+    // $(".header li.mail").remove();
+
+    $(".header li.discuss a").attr("target", "_blank"); // open in new tab
 
     // Show level stat in dialog
     $(".levelstats a").click($.proxy(this.showLevelStat, this));
@@ -43,59 +44,47 @@ class GamePrepare extends GameManager {
     $("a#lblGameTitle").attr("target", "_blank");
 
     // Replace Encounter logo
-    $("a.logo").attr("target", "_blank");
+    // $("a.logo").attr("target", "_blank");
 
-    this.userUpdateTime = 0;
+    // this.userUpdateTime = 0;
 
     $(".header")
       .append(encx_tpl.documentWritePrepare());
   }
 
-  initialize (storage){
+
+  initialize(storage) {
     if (storage.isFirstLoad()){
-      // Add history button
-      $(".header ul .enext-history").remove();
+      $(".enext-block").remove();
+
+      // prepare history dialog
       $(".header ul")
-        .append(
-          $("<li>")
-            .addClass("enext-history")
-            .append(
-              $("<a>")
-                .append($("<i>"))
-                .append($("<span>").append(chrome.i18n.getMessage("menuHistory")))
-                .click(
-                  {
-                    gamePrepare: this,
-                    storage: storage
-                  },
-                  this.showGameHistory
-                )
-            )
-        )
         .before(
           this._gameHistoryDialogTemplate()
         );
+
       this._prepareHistoryDialog();
 
       // Add bonuses and penalty button
-      $(".header ul .enext-bonuses").remove();
-      $(".header ul")
-        .append(
-          $("<li>")
-            .addClass("enext-bonuses")
-            .append(
-              $("<a>")
-                .append($("<i>"))
-                .append(
-                  $("<span>").append(chrome.i18n.getMessage("menuBonuses"))
-                )
-                .attr("href", storage.getBonusesURL())
-                .attr("target", "_blank")
-            )
-        );
+      // $(".header ul .enext-bonuses").remove();
+      // $(".header ul")
+      //   .append(
+      //     $("<li>")
+      //       .addClass("enext-bonuses")
+      //       .append(
+      //         $("<a>")
+      //           .append($("<i>"))
+      //           .append(
+      //             $("<span>").append(chrome.i18n.getMessage("menuBonuses"))
+      //           )
+      //           .attr("href", storage.getBonusesURL())
+      //           .attr("target", "_blank")
+      //       )
+      //   );
     }
 
-    this.updateUserInfo(storage, true);
+    $("div.container")
+    .append(this._infoBlock(storage, storage.getGame(), storage.getLevel()))
 
     $("div.content").empty();
   }
@@ -103,7 +92,7 @@ class GamePrepare extends GameManager {
   update (storage) {
     // Restart
     chrome.storage.local.get(
-      'deniedDomains',
+      "deniedDomains",
       function (result){
         if ((result.deniedDomains || "").split("|").includes(location.hostname)){
           location.reload();
@@ -114,8 +103,6 @@ class GamePrepare extends GameManager {
     if (storage.isLevelUpMessageTime()){
       this.playSound("audio/levelup.mp3");
     }
-
-    this.updateUserInfo(storage);
 
     isOptionTruePromise(`${this.storage.getGameId()}-disable-chat`).then(
       () => { $('#ChatForm, #ChatFrame').hide(); },
@@ -147,43 +134,185 @@ class GamePrepare extends GameManager {
       });
   }
 
-  updateUserInfo(storage, force = false){
-    // Refresh every minute
-    if (
-      !force &&
-      (Date.now() - this.userUpdateTime) < 1000 * 60
-    ) return;
+  _infoBlock(storage, game, level) {
+    // toggle user info
+    $(function() {
+      $('.toggle_userdetails').click(function() {
 
-    // Display player info
-    $.get(
-      storage.getMyTeamURL(),
-      function(result){
-        var userinfo = $(result)
-            .find("#tblUserBox tr:first td:first a[href='/UserDetails.aspx']");
-
-        var teaminfo = $(result).find("a#lnkTeamName");
-        if (0 === teaminfo.length){
-          teaminfo = [ encx_tpl.singleTeamLink(storage.getMyTeamURL()) ];
+        if ($(this).hasClass('click1')) {
+          $("ul.userdetails").toggle();
         }
 
-        var mailinfo = $(result).find("#spanUnreadMails");
-        $(mailinfo[0]).show();
-        if ($(mailinfo[0]).find("a").text() === ""){
-          $(mailinfo[0]).find("a").text("0");
+        else {
+          $.get(
+            gameStorage.getMyTeamURL(),
+            function(result){
+              var userinfo = $(result).find("#tblUserBox tr:first td:first a[href='/UserDetails.aspx']");
+              var teaminfo = $(result).find("a#lnkTeamName");
+
+              if (0 === teaminfo.length){
+                teaminfo = [ encx_tpl.singleTeamLink(gameStorage.getMyTeamURL()) ];
+              }
+
+              // var mailinfo = $(result).find("#spanUnreadMails");
+              // $(mailinfo[0]).show();
+              // if ($(mailinfo[0]).find("a").text() === ""){
+              //   $(mailinfo[0]).find("a").text("0");
+              // }
+
+              $("ul.userdetails").remove();
+              $(".enext-block")
+              .append(
+                $("<ul>").addClass("userdetails")
+                .append(chrome.i18n.getMessage('titleUserLogin'))
+                .append(userinfo[0])
+                .append("  |  ")
+                .append(chrome.i18n.getMessage('titleUserTeam'))
+                .append(teaminfo[0])
+              )
+            }
+          );
+
+          this.userUpdateTime = Date.now();
         }
 
-        $("div.header .userinfo").remove();
-        $("div.header")
-          .append(encx_tpl.userinfoBlock({
-            "user": userinfo[0],
-            "team": teaminfo[0],
-            "mail": mailinfo[0]
-          }));
-        $("div.userinfo a").attr("target", "_blank");
-      }
+        $(this).toggleClass('click1');
+
+        return false;
+
+      });
+    });
+
+    $(".enext-block").remove();
+
+    return $("<div>").addClass("enext-block")
+     .append(
+      $("<ul>")
+      // TODO search script in text
+      // .append($("<li>").append(this._levelScriptsAlert(level)))
+      .append($("<li>").append(this._levelTimer(level)))
+      .append($("<li>").append( this._levelDuration(level)))
+      .append($("<li>").append( this._levelBonusesSummary()))
+
+      .append(
+        $("<li>").addClass("enext-history")
+        .append(
+          $("<span>")
+          .append(
+            $("<a>")
+            .append(chrome.i18n.getMessage('menuHistory'))
+            .click(
+              {
+                gamePrepare: this,
+                storage: storage
+              },
+              this.showGameHistory
+            )
+          )
+          .before(
+            this._gameHistoryDialogTemplate()
+          )
+        )
+      )
+
+      .append(
+        $("<li>").addClass("enext-bonuses")
+        .append(
+          $("<a>")
+            .append($("<i>"))
+            .append(
+              $("<span>").append(chrome.i18n.getMessage("menuBonuses"))
+            )
+            .attr("href", storage.getBonusesURL())
+            .attr("target", "_blank")
+        )
+      )
+
+      .append(
+        $("<li>").addClass("enext-userdetails")
+        .append(
+          $("<a>").addClass ('dashed toggle_userdetails')
+           .append(chrome.i18n.getMessage('titleUserInfo'))
+        )
+      )
     );
+  }
 
-    this.userUpdateTime = Date.now();
+  _levelScriptsAlert(level) {
+    if (level.IsPassed) return "";
+
+    return $("<span>").addClass("alerts")
+    .attr('title', 'В тексте уровня есть скрипты.\nРасширение может повлиять на их выполнение.')
+    .append("⚠️");
+  }
+
+  _levelTimer(level) {
+    // message if level is passed
+    if (level.IsPassed)
+      return $("<span>").append(chrome.i18n.getMessage("levelIsPassed"));
+
+    // timer if level have no timeout
+    if (level.TimeoutSecondsRemain == 0) {
+      return $("<span>")
+      .attr("title",
+        chrome.i18n.getMessage("levelStart",
+        [ENEXT.convertTimestamp(level.StartTime.Value, 'readable')] + " " +
+        [ENEXT.currentTimestamp('offset')]) + "\n" +
+        chrome.i18n.getMessage("currentTime",
+        [ENEXT.currentTimestamp('readable')] + " " +
+        [ENEXT.currentTimestamp('offset')])
+      )
+      .append(chrome.i18n.getMessage("levelOnLevelTime"))
+      .append(
+        $("<span>").addClass("countdown-timer forward")
+        .attr("seconds-left", ENEXT.currentTimestamp('local') - ENEXT.convertTimestamp(level.StartTime.Value, 'unix'))
+        .attr("seconds-step", +1 )
+        .append(ENEXT.convertTime(ENEXT.currentTimestamp('local') - ENEXT.convertTimestamp(level.StartTime.Value, 'unix'), 'timer'))
+      );
+    }
+
+      // timer if level timeout is set
+      return $("<span>")
+      .append(chrome.i18n.getMessage("levelOnLevelTime"))
+      .append(
+        $("<span>")
+        .attr("title",
+          chrome.i18n.getMessage("levelStart",
+          [ENEXT.convertTimestamp(level.StartTime.Value, 'readable')] + " " +
+          [ENEXT.currentTimestamp('offset')]) + "\n" +
+          chrome.i18n.getMessage("currentTime",
+          [ENEXT.currentTimestamp('readable')] + " " +
+          [ENEXT.currentTimestamp('offset')])
+        )
+          .addClass("countdown-timer forward")
+          .attr("seconds-left", level.Timeout - level.TimeoutSecondsRemain)
+          .attr("seconds-step", +1)
+          .append(ENEXT.convertTime(level.Timeout - level.TimeoutSecondsRemain, 'timer'))
+      );
+    }
+
+  _levelDuration(level) {
+    if (level.Timeout > 0) return $("<span>").css('color', '#FFF720 !important')
+      .append(chrome.i18n.getMessage("levelDuration", [ENEXT.convertTime(level.Timeout)]));
+
+    return $("<span>").css('color', '#FF720 !important')
+      .append(chrome.i18n.getMessage("levelInfinite"));
+  }
+
+  _levelBonusesSummary() {
+    if (this.storage.getBonuses().length <= 0) return "";
+
+    return $("<span>").addClass("color_bonus")
+      .append(
+        chrome.i18n.getMessage(
+          "bonusBlockTitle",
+          [
+            this.storage.getCompletedBonusesData()[0],
+            this.storage.getBonuses().length,
+            this.storage.getCompletedBonusesData()[1],
+          ]
+        )
+      );
   }
 
   _historyLevelList(){

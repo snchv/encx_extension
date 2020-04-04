@@ -159,24 +159,24 @@ class Templates {
   /*
   Block for username and mailbox watch
   */
-  userinfoBlock(data){
-    return $("<div>")
-      .addClass("userinfo")
-      .append(data["user"])
-      .append(" (")
-      .append(data["team"])
-      .append(") ")
-      .append(
-        $("<span>")
-          .addClass("mailbox")
-          .append(
-            $("<span>")
-              .addClass("icon")
-              .append("&#x2709; ")
-          )
-          .append(data["mail"])
-      );
-  }
+  // userinfoBlock(data){
+  //   return $("<div>")
+  //     .addClass("userinfo")
+  //     .append(data["user"])
+  //     .append(" (")
+  //     .append(data["team"])
+  //     .append(") ")
+  //     .append(
+  //       $("<span>")
+  //         .addClass("mailbox")
+  //         .append(
+  //           $("<span>")
+  //             .addClass("icon")
+  //             .append("&#x2709; ")
+  //         )
+  //         .append(data["mail"])
+  //     );
+  // }
 
   singleTeamLink(teamURL){
     return `<a href="${teamURL}">${chrome.i18n.getMessage("titleNoTeam")}</a>`;

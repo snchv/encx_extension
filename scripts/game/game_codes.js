@@ -161,6 +161,7 @@ class GameCodesManager extends GameManager {
   }
 
   _inputFieldTemplate(data){
+    console.log("level have code blockage: " + gameStorage.isBlockage());
     return $("<form>")
       .attr("id", "answer-box")
       .append(
@@ -177,7 +178,7 @@ class GameCodesManager extends GameManager {
       )
       .append(
         $("<input>")
-          .addClass("placeholder")
+          .attr("type", "text")
           .attr("id", "Answer")
           .attr("name", "LevelAction.Answer")
           .attr("maxlength", 4000)
@@ -187,12 +188,18 @@ class GameCodesManager extends GameManager {
             chrome.i18n.getMessage("inputFieldPlaceholder")
           )
           .attr("value", "")
-          .attr("type", "text")
+          .addClass("placeholder")
+
       )
       .append(
         $("<div>")
-          .addClass("hint")
-          .addClass("blockageinfo")
+        .addClass("hint")
+        .addClass("blockageinfo")
+// do not show if answers are not restricted
+        .css('display', function() {
+          if ( !gameStorage.isBlockage() ) return 'none'
+          else return 'inline'
+        })
       )
       .append(
         $("<label>")

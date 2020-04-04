@@ -142,6 +142,10 @@ class GameLevelListManager extends GameManager {
     //       )
     //     }
     //   );
+
+    // console.log( gameStorage.getCleanURL() );
+
+
     return $('<li>')
      .addClass('level-block')
      .addClass(this.activeLevel == level.LevelId ? 'level-active' : '')
@@ -152,10 +156,19 @@ class GameLevelListManager extends GameManager {
      .attr('id', `level-${level.LevelId}`)
    .append($('<i>').append(level.LevelNumber))
      .append($('<div>').addClass('line'))
-     .append($('<p>').append(level.LevelName))
+     .append(`<span>${level.LevelName}</span>`)
+
+
    .click({ storage: this.storage }, function(event) {
+
        $('.level-block').removeClass('level-active');
        $(this).addClass('level-active');
+
+       // change link
+       history.pushState('','',`${gameStorage.getCleanURL()}?level=${$(this).attr('level-number')}`);
+       // change refresh link
+       $('li.refresh a')
+       .attr('href', `${gameStorage.getCleanURL()}?level=${$(this).attr('level-number')}`);
 
        event.data.storage.changeLevel(
          $(this).attr('level-id'),
