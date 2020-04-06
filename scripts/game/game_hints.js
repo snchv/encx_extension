@@ -84,9 +84,10 @@ class GameHintManager extends GameManager {
     return $("<p>")
            .append(`<p>${chrome.i18n.getMessage(
                    "hintPenaltyDescription",
-                   [hint.PenaltyComment])}</p><div class="spacer"></div>`)
+                   [hint.PenaltyComment])}</p>`)
+           // .append($("<div>").addClass("spacer"))
            .append(hint.HelpText
-                   ? (`${hint.HelpText}<wbr>`)
+                   ? (`<p>${hint.HelpText}</p>`)
                    : this._openPenaltyTemplate(hint)
                   );
 

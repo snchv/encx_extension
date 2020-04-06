@@ -74,7 +74,7 @@ var ENEXT = {
         }
 
       case 'unix':
-        return Math.round(d.getTime() / 1000);
+        return Math.floor(d.getTime() / 1000);
     }
   },
 
@@ -108,11 +108,11 @@ var ENEXT = {
 
   // local time
       case 'local':
-        return Math.round(ct.getTime() / 1000);
+        return Math.floor(ct.getTime() / 1000);
 
   // UTC+0 time
       case 'UTC':
-        return Math.round((ct.getTime() + ct.getTimezoneOffset()*60*1000)/1000);
+        return Math.floor((ct.getTime() + ct.getTimezoneOffset()*60*1000)/1000);
 
       case 'offset':
         if (ct.getTimezoneOffset() <= 0) {return 'UTC+' + Math.abs(ct.getTimezoneOffset()/60);}
@@ -175,7 +175,7 @@ var ENEXT = {
         }
         sec = Math.floor(sec / 60);
 
-        if (sec % 60 >= 0){
+        if (sec % 60 > 0){
           result = chrome.i18n.getMessage("timeMin", [sec%60, result]);
         }
         sec = Math.floor(sec / 60);
@@ -223,6 +223,7 @@ $(function(){
     {
       'selectSentCode': true,
       'enableSound': true,
+      'enextBarBottom': false,
       'autoFocus': true,
       'refreshRate': 5,
       'disableChat': false,
@@ -245,6 +246,7 @@ $(function(){
       var option_key;
       var option_list = [
         'enable-sound',
+        'enext-bar-bottom',
         'refresh-rate',
         'auto-focus',
         'select-sent-code',

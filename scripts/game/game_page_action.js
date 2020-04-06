@@ -47,6 +47,7 @@ class GamePageAction extends GameManager {
         "show-complete-bonus-task": isOptionTrue(`${this.storage.getGameId()}-show-complete-bonus-task`),
         "show-complete-bonus-code": isOptionTrue(`${this.storage.getGameId()}-show-complete-bonus-code`),
         "enable-sound": isOptionTrue(`${this.storage.getGameId()}-enable-sound`),
+        "enext-bar-bottom": isOptionTrue(`${this.storage.getGameId()}-enext-bar-bottom`),
         "auto-focus": isOptionTrue(`${this.storage.getGameId()}-auto-focus`, true),
         "select-sent-code": isOptionTrue(`${this.storage.getGameId()}-select-sent-code`, true),
         "disable-chat": isOptionTrue(`${this.storage.getGameId()}-disable-chat`),

@@ -84,9 +84,10 @@ class GamePrepare extends GameManager {
     }
 
     $("div.container")
-    .append(this._infoBlock(storage, storage.getGame(), storage.getLevel()))
+    .append(this._infoBlock(storage, storage.getGame(), storage.getLevel()));
 
     $("div.content").empty();
+    // console.log( document.body.clientHeight / Number.parseFloat(+/\d+.\d/.exec($('#ChatFrame').attr('style'))) );
   }
 
   update (storage) {
@@ -104,9 +105,21 @@ class GamePrepare extends GameManager {
       this.playSound("audio/levelup.mp3");
     }
 
+    isOptionTruePromise(`${this.storage.getGameId()}-enext-bar-bottom`).then(
+      () => { $('#ChatFrame').css("height", `${(document.body.clientHeight-75-12-45-15-12)/2.25 - 48}px`);
+              $(".enext-block").addClass("enext-block-bottom"); // add class for bottom position
+            },
+      () => { $(".enext-block").removeClass("enext-block-bottom"); }
+    );
+
+    // isOptionTruePromise(`${this.storage.getGameId()}-disable-chat`).then(
+    //   () => { $('#ChatForm, #ChatFrame').hide(); },
+    //   () => { $('#ChatForm, #ChatFrame').show(); }
+    // );
+
     isOptionTruePromise(`${this.storage.getGameId()}-disable-chat`).then(
-      () => { $('#ChatForm, #ChatFrame').hide(); },
-      () => { $('#ChatForm, #ChatFrame').show(); }
+      () => { $('#ChatForm').hide(); },
+      () => { $('#ChatForm').show(); }
     );
   }
 
@@ -145,13 +158,13 @@ class GamePrepare extends GameManager {
 
         else {
           $.get(
-            gameStorage.getMyTeamURL(),
+            storage.getMyTeamURL(),
             function(result){
               var userinfo = $(result).find("#tblUserBox tr:first td:first a[href='/UserDetails.aspx']");
               var teaminfo = $(result).find("a#lnkTeamName");
 
               if (0 === teaminfo.length){
-                teaminfo = [ encx_tpl.singleTeamLink(gameStorage.getMyTeamURL()) ];
+                teaminfo = [ encx_tpl.singleTeamLink(storage.getMyTeamURL()) ];
               }
 
               // var mailinfo = $(result).find("#spanUnreadMails");
@@ -173,7 +186,7 @@ class GamePrepare extends GameManager {
             }
           );
 
-          this.userUpdateTime = Date.now();
+          // this.userUpdateTime = Date.now();
         }
 
         $(this).toggleClass('click1');
@@ -189,10 +202,22 @@ class GamePrepare extends GameManager {
      .append(
       $("<ul>")
       // TODO search script in text
-      // .append($("<li>").append(this._levelScriptsAlert(level)))
-      .append($("<li>").append(this._levelTimer(level)))
-      .append($("<li>").append( this._levelDuration(level)))
-      .append($("<li>").append( this._levelBonusesSummary()))
+      .append(this._levelScriptsAlert(storage, level))
+
+      .append($("<li>").addClass("enext-level-timer")
+      .append(this._levelTimer(level)
+        )
+      )
+
+      .append($("<li>").addClass("enext-level-duration")
+      .append(this._levelDuration(level)
+        )
+      )
+
+      .append($("<li>").addClass("enext-bonuses-summary")
+      .append(this._levelBonusesSummary()
+        )
+      )
 
       .append(
         $("<li>").addClass("enext-history")
@@ -238,12 +263,18 @@ class GamePrepare extends GameManager {
     );
   }
 
-  _levelScriptsAlert(level) {
+  _levelScriptsAlert(storage, level) {
     if (level.IsPassed) return "";
 
-    return $("<span>").addClass("alerts")
-    .attr('title', 'В тексте уровня есть скрипты.\nРасширение может повлиять на их выполнение.')
-    .append("⚠️");
+    if ( storage.getTaskText().includes('</script>') )
+    return $("<li>").addClass("enext-alert")
+            .append(
+              $("<span>").addClass("alerts")
+              .attr('title', chrome.i18n.getMessage('levelContainsScript'))
+              .append("⚠️")
+            );
+
+    return "";
   }
 
   _levelTimer(level) {
@@ -285,9 +316,9 @@ class GamePrepare extends GameManager {
           [ENEXT.currentTimestamp('offset')])
         )
           .addClass("countdown-timer forward")
-          .attr("seconds-left", level.Timeout - level.TimeoutSecondsRemain)
+          .attr("seconds-left", level.Timeout - level.TimeoutSecondsRemain - 1 )
           .attr("seconds-step", +1)
-          .append(ENEXT.convertTime(level.Timeout - level.TimeoutSecondsRemain, 'timer'))
+          .append(ENEXT.convertTime(level.Timeout - level.TimeoutSecondsRemain - 1, 'timer'))
       );
     }
 
@@ -295,12 +326,14 @@ class GamePrepare extends GameManager {
     if (level.Timeout > 0) return $("<span>").css('color', '#FFF720 !important')
       .append(chrome.i18n.getMessage("levelDuration", [ENEXT.convertTime(level.Timeout)]));
 
-    return $("<span>").css('color', '#FF720 !important')
+    return $("<span>").css('color', '#FFF720 !important')
       .append(chrome.i18n.getMessage("levelInfinite"));
   }
 
   _levelBonusesSummary() {
-    if (this.storage.getBonuses().length <= 0) return "";
+    if (this.storage.getBonuses().length == 0)
+      return $("<span>").addClass("color_bonus")
+             .append(chrome.i18n.getMessage("bonusFreeBlockTitle"));
 
     return $("<span>").addClass("color_bonus")
       .append(

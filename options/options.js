@@ -28,6 +28,7 @@ function saveOptions(e) {
   chrome.storage.local.set({
     "selectSentCode": document.querySelector("#selectSentCode").checked,
     "enableSound": document.querySelector("#enableSound").checked,
+    "enextBarBottom": document.querySelector("#enextBarBottom").checked,
     "autoFocus": document.querySelector("#autoFocus").checked,
     "refreshRate": document.querySelector("#refreshRate").value,
     "disableChat": document.querySelector("#disableChat").checked,
@@ -50,6 +51,7 @@ function restoreOptions() {
     document.querySelector("#refreshRate").value = result.refreshRate;
     document.querySelector("#autoFocus").value = result.autoFocus;
     document.querySelector("#enableSound").checked = result.enableSound;
+    document.querySelector("#enextBarBottom").checked = result.enextBarBottom;
     document.querySelector("#disableChat").checked = result.disableChat;
 
     document.querySelector("#hideDisclosedSectors").checked = result.hideDisclosedSectors;
@@ -74,7 +76,8 @@ function restoreOptions() {
       "refreshRate": 5,
       "autoFocus": true,
       "enableSound": true,
-      "disableChat": false,
+      "enextBarBottom": false,
+      "disableChat": true,
 
       "hideDisclosedSectors": false,
       "hideCompleteBonuses": false,

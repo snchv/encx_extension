@@ -24,6 +24,8 @@ SOFTWARE.
 
 class GameErrors extends GameManager {
   initialize(storage){
+    $("div.content").append($("<div>")
+    .addClass("spacer").css('height','60px'));
     $("#error-container").remove();
     $(".container").prepend(
       encx_tpl.errorContainer()

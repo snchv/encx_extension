@@ -60,6 +60,11 @@
     "description": "Опция включения звуковых уведомлений"
   },
 
+  "optionsEnextBarBottom": {
+    "message": "Строка состояния снизу",
+    "description": "Опция расположения строки состояния снизу"
+  },
+
   "optionsAutoFocus": {
     "message": "Автоматически фокусироваться на поле ввода",
     "description": "Опция включения автофокусировки"
@@ -288,6 +293,11 @@
     "description": "Текст кнопки открытия штрафной подсказки"
   },
 
+  "levelContainsScript": {
+    "message": "В тексте уровня есть скрипты.\nРасширение может повлиять на их выполнение.",
+    "description": "Подсказка, если в тексте уровня есть скрипты"
+  },
+
   "levelTitle": {
     "message": "Уровень <span>$NUM$</span> из $TOTAL$$NAME$",
     "description": "Заголовок уровня",
@@ -308,6 +318,11 @@
     "message": "Бонусы: <span id='bonuses-closed'>$1</span>/<span id='bonuses-total'>$2</span> (<span id='bonus-time'>$3</span>)",
     "description": "Заголовок бонусов"
    },
+
+   "bonusFreeBlockTitle": {
+     "message": "Бонусов нет",
+     "description": "Заголовок если нет бонусов"
+    },
 
    "levelStart": {
      "message": "Выдан: $1",

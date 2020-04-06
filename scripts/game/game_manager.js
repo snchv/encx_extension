@@ -29,7 +29,7 @@ class GameManager {
       .append(text)
       .append(
         $("<span>")
-          .addClass("countdown-timer")
+          .addClass("countdown-timer backward")
           .attr("seconds-left", seconds)
           .append(ENEXT.convertTime(seconds))
       );

@@ -25,8 +25,6 @@ SOFTWARE.
 class GameBonusManager extends GameManager {
   initialize(storage){
     $("div.content")
-    // .append( (storage.getBonuses().length > 0) ? this._titleBonusBlockTemplate() : "")
-    // .append($("<div>").addClass("spacer"))
     .append("<div id='bonuses'></div>");
   }
 

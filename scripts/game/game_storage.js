@@ -111,6 +111,9 @@ class GameStorage {
         return encx_tpl.errorNotInActiveStaff();
       case 13:
         return encx_tpl.errorPlayerLimitExceeded();
+      // case 17: // game is over
+      // case 19: // level is not issued (?)
+      // case 22: // level is over (?)
       default:
         return encx_tpl.errorUnknown(this.last.Event);
     }
@@ -118,6 +121,11 @@ class GameStorage {
 
   // Execute all needed callbacks when data reloaded
   _doCallbacks(){
+
+    if (this.isStormGame() && this.getLevels().every(level => level.IsPassed)) {
+      this.update({}, true);
+    }
+
     /*
      * Initialize callback
      * Called on first run and on every LevelId change
@@ -197,6 +205,16 @@ class GameStorage {
   }
 
   storeAPI(data){
+
+    if (data.Level === null && data.Event === 19) {
+      return this.update({}, true);
+    }
+
+
+    if (data.Level === null && data.Event === 22) {
+      return this.update({}, true);
+    }
+
     this.prev = this.last;
     this.last = data;
 

@@ -48,9 +48,9 @@ class GameTaskManager extends GameManager {
   }
 
   _sectorsClosingSpeed(storage){
-    var sec_speed = Math.round(
-      (ENEXT.currentTimestamp() - ENEXT.convertTimestamp(storage.getLevel().StartTime.Value, "unix")) / storage.getSectorsClosedNumber()
-    );
+    var sec_speed = Math.floor((ENEXT.currentTimestamp() -
+                    ENEXT.convertTimestamp(storage.getLevel().StartTime.Value, "unix")) /
+                    storage.getSectorsClosedNumber());
 
     if (sec_speed <= 0) return "";
 
@@ -60,19 +60,14 @@ class GameTaskManager extends GameManager {
   }
 
   initialize(storage){
-    $("div.content")
-      // .append(this._titleTemplate(storage.getGame(), storage.getLevel()))
 
-      // do not show level title if storm game
+    $("div.content")
       .append(storage.isStormGame() ? "" : this._titleTemplate(storage.getGame()))
       .append(storage.isStormGame() ? "" : $("<div>").addClass("spacer"))
-
-      .append(this._timeoutTemplate(storage.getLevel()))
-
-      .append(this._sectorsTitleTemplate(storage.getLevel()))
+      .append(this._timeoutTemplate(storage, storage.getLevel()))
+      .append(this._sectorsTitleTemplate(storage, storage.getLevel()))
       .append(this._sectorsTemplate(storage.getLevel()))
       .append((storage.getSectorNumber() < 2) ? "" : $("<div>").addClass("spacer"))
-
       .append(this._taskTemplate(storage.getLevel()));
 
     this.task = storage.getTaskText();
@@ -92,31 +87,50 @@ class GameTaskManager extends GameManager {
         .replaceWith(this._titleTemplate(storage.getGame()));
     }
 
-    // Update timeout data
-    // if (storage.getTimeoutSecondsRemain() > 0){
-    //   $("#timeout-block .countdown-timer.backward")
-    //     .attr("seconds-left", storage.getTimeoutSecondsRemain());
-    //     $("#timeout-block .countdown-timer.forward")
-    //       .attr("seconds-left", storage.getTimeout() - storage.getTimeoutSecondsRemain());
-    // } else if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
-    //   $("#timeout-block")
-    //     .replaceWith(this._timeoutTemplate(storage.getLevel()));
-    // }
 
     // if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
 
     if (storage.isLevelUp()) {
       $("#timeout-block")
         .replaceWith(this._timeoutTemplate(storage.getLevel()));
-    } else  if (storage.getTimeoutSecondsRemain() == 0){
+    } else  if (storage.getTimeoutSecondsRemain() == 0) {
         $("#timeout-block .countdown-timer.forward")
-          .attr("seconds-left", ENEXT.currentTimestamp('local') - ENEXT.convertTimestamp(storage.getStartTime(), 'unix'));
+          .attr("seconds-left", ENEXT.currentTimestamp('local') -
+          ENEXT.convertTimestamp(storage.getStartTime(), 'unix'));
     } else if (storage.getTimeoutSecondsRemain() > 0){
       $("#timeout-block .countdown-timer.backward")
         .attr("seconds-left", storage.getTimeoutSecondsRemain());
         $("#timeout-block .countdown-timer.forward")
-          .attr("seconds-left", storage.getTimeout() - storage.getTimeoutSecondsRemain());
+          .attr("seconds-left", storage.getTimeout() -
+          storage.getTimeoutSecondsRemain());
     }
+
+    // Update timeout data
+    // if (storage.getTimeoutSecondsRemain() > 0){
+    //   $("#timeout-block .countdown-timer.backward")
+    //     .attr("seconds-left", storage.getTimeoutSecondsRemain());
+    //   $("#timeout-block .countdown-timer.forward")
+    //     .attr("seconds-left", storage.getTimeout() - storage.getTimeoutSecondsRemain());
+    // } else if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
+    //   $("#timeout-block")
+    //     .replaceWith(this._timeoutTemplate(storage.getLevel()));
+    // }
+
+    if (storage.getTimeoutSecondsRemain() > 0){
+      $("#timeout-block .countdown-timer.backward")
+        .attr("seconds-left", storage.getTimeoutSecondsRemain() + 1);
+      $("#timeout-block .countdown-timer.forward")
+        .attr("seconds-left", storage.getTimeout() - storage.getTimeoutSecondsRemain() - 1);
+    } else if (storage.isLevelUp() && !storage.getTimeoutSecondsRemain()) {
+      $("#timeout-block")
+        .replaceWith(this._timeoutTemplate(storage.getLevel()));
+    } else if (storage.getTimeoutSecondsRemain() == 0) {
+        $("#timeout-block .countdown-timer.forward")
+          .attr("seconds-left", ENEXT.currentTimestamp('local') -
+          ENEXT.convertTimestamp(storage.getStartTime(), 'unix'));
+    }
+
+
 
     // Update sectors header
     if (storage.getSectorNumber() > 1){
@@ -162,7 +176,7 @@ class GameTaskManager extends GameManager {
     }
   }
 
-  _titleTemplate(game, level){
+  _titleTemplate(game){
     return $("<div>").addClass("level-length")
       .append(
         $("<h2> content")
@@ -175,7 +189,6 @@ class GameTaskManager extends GameManager {
           ])
         )
       );
-
             // // level start time
             // .append(
             //   $("<span>").addClass("color_dis").css("white-space", "nowrap")
@@ -196,17 +209,19 @@ class GameTaskManager extends GameManager {
 
   _timeoutTemplate(level){
 
-    if (level.IsPassed) return "";
+    // if (level.IsPassed) return "";
     if (level.TimeoutSecondsRemain == 0) return "";
 
     // level duration if timeout is set
-    return $("<h3>").addClass("timer").attr("id", "timeout-block")
+    return $("<h3>")
+      .addClass("timer")
+      .attr("id", "timeout-block")
       .append(chrome.i18n.getMessage("levelAutoUp"))
       .append(
         $("<span>")
           .addClass("countdown-timer backward")
-          .attr("seconds-left", level.TimeoutSecondsRemain)
-          .append(ENEXT.convertTime(level.TimeoutSecondsRemain, 'timer'))
+          .attr("seconds-left", level.TimeoutSecondsRemain + 1)
+          .append(ENEXT.convertTime(level.TimeoutSecondsRemain + 1, 'timer'))
       )
       .append(" ")
       .append(
@@ -217,7 +232,7 @@ class GameTaskManager extends GameManager {
       .append($("<div>").addClass("spacer"));
   }
 
-  _sectorsTitleTemplate(level){
+  _sectorsTitleTemplate(storage, level){
     if (level.Sectors.length < 2) return ""; // do not show if there's only one sector
 
     // toggle not closed sectors
@@ -225,21 +240,20 @@ class GameTaskManager extends GameManager {
       $('.toggle_disclosedSectors').on('click', function() {
 
         localStorage.setItem(
-          `${gameStorage.getGameId()}-hide-disclosed-sectors`,
-          !isOptionTrue(`${gameStorage.getGameId()}-hide-disclosed-sectors`)
+          `${storage.getGameId()}-hide-disclosed-sectors`,
+          !isOptionTrue(`${storage.getGameId()}-hide-disclosed-sectors`)
         );
 
         $('.disclosed_sectors').toggle();
-        if (isOptionTrue(`${gameStorage.getGameId()}-hide-disclosed-sectors`)) $("#sectors-left-list-block").hide();
+        if (isOptionTrue(`${storage.getGameId()}-hide-disclosed-sectors`)) $("#sectors-left-list-block").hide();
         else $("#sectors-left-list-block").show();
 
         // gameStorage.update();
-        console.log('hide-disclosed-sectors: ' + isOptionTrue(`${gameStorage.getGameId()}-hide-disclosed-sectors`));
         return false;
       });
     });
 
-    return $("<div>").addClass("pad")
+    return $("<div>")
     .append(
       $("<h3>")
       .append(
@@ -268,7 +282,7 @@ class GameTaskManager extends GameManager {
           .attr("id", "sectors-left-list-block")
           .append(chrome.i18n.getMessage("sectorsDisclosed",[this._openSectorList(level.Sectors)]))
         )
-    )
+    );
 
   }
 
@@ -295,7 +309,7 @@ class GameTaskManager extends GameManager {
               .append(sector.Answer.Login)
           )
           .append(")")
-      )
+      );
   }
 
   _incompleteSectorTemplate(sector){
@@ -326,7 +340,7 @@ class GameTaskManager extends GameManager {
 
     return result
       .append(
-        $("<div>").addClass("pad")
+        $("<div>")
         .append(
           $("<h3>").append(chrome.i18n.getMessage("titleTask"))
         )
