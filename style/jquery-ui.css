@@ -487,13 +487,21 @@ button.ui-button::-moz-focus-inner {
 	left: .5em;
 	top: .3em;
 }
-.ui-dialog {
+/* .ui-dialog {
 	position: absolute;
 	top: 0;
 	left: 0;
 	padding: .2em;
 	outline: 0;
+} */
+.ui-dialog {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0;
+	outline: 0;
 }
+
 .ui-dialog .ui-dialog-titlebar {
 	padding: .4em 1em;
 	position: relative;
@@ -518,7 +526,7 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;
-	padding: .5em 1em;
+	padding: 0.5em 0.5em;
 	background: none;
 	overflow: auto;
 }
@@ -526,15 +534,16 @@ button.ui-button::-moz-focus-inner {
 	text-align: left;
 	border-width: 1px 0 0 0;
 	background-image: none;
-	margin-top: .5em;
-	padding: .3em 1em .5em .4em;
+	margin-top: 0;
+	padding: .5em 1em .5em 1em;
 }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
 	float: right;
 }
 .ui-dialog .ui-dialog-buttonpane button {
-	margin: .5em .4em .5em 0;
+	margin: .5em 1em .5em 0;
 	cursor: pointer;
+	font-size: 85%;
 }
 .ui-dialog .ui-resizable-n {
 	height: 2px;
@@ -883,30 +892,46 @@ body .ui-tooltip {
 
 /* Component containers
 ----------------------------------*/
-.ui-widget {
+/* .ui-widget {
 	font-family: Arial,Helvetica,sans-serif;
 	font-size: 1em;
+} */
+
+.ui-widget {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 1em;
 }
+
 .ui-widget .ui-widget {
 	font-size: 1em;
 }
-.ui-widget input,
+/* .ui-widget input,
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
 	font-family: Arial,Helvetica,sans-serif;
 	font-size: 1em;
+} */
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 1em;
 }
+
+
 .ui-widget.ui-widget-content {
 	border: 1px solid #c5c5c5;
 }
 .ui-widget-content {
 	border: 1px solid #dddddd;
-	background: #ffffff;
+	background: #1d1d1d;
 	color: #333333;
 }
 .ui-widget-content a {
-	color: #333333;
+	/* color: #808080; */
 }
 .ui-widget-header {
 	border: 1px solid #dddddd;
@@ -1303,25 +1328,25 @@ body.gc .ui-button .ui-icon {
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	border-top-left-radius: 3px;
+	border-top-left-radius: 0;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	border-top-right-radius: 3px;
+	border-top-right-radius: 0;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 0;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	border-bottom-right-radius: 3px;
+	border-bottom-right-radius: 0;
 }
 
 /* Overlays */

@@ -353,6 +353,7 @@ class GamePrepare extends GameManager {
     this.storage.getLevels().forEach(function(element){
       result.push(`<option value="${element.LevelId}">${element.LevelNumber}: ${element.LevelName}</option>`);
     });
+    console.log(result);
     return result.join("\n");
   }
 
@@ -366,7 +367,7 @@ class GamePrepare extends GameManager {
             ${chrome.i18n.getMessage("titleLevel")}:
             <select id="game-history-level"></select>
           </td>
-          <td>
+          <td class="alignedRight">
             ${chrome.i18n.getMessage("titlePlayer")}:
             <select id="game-history-player"></select>
           </td>
@@ -377,7 +378,7 @@ class GamePrepare extends GameManager {
           </td>
         </tr>
         <tr>
-          <td colspan=2><ul id="game-history-codes"></ul></td>
+          <td colspan=2 class="codes history"><ul id="game-history-codes"></ul></td>
         </tr>
       </table>
     </div>
@@ -392,11 +393,10 @@ class GamePrepare extends GameManager {
         `<option value="All">${chrome.i18n.getMessage("titleAny")}</option>`
       );
       e.data.storage.getLevels().forEach(function (level){
-        $("#game-history-level").append(
-          `<option value="${level.LevelId}">
-          ${level.LevelNumber}: ${level.LevelName}
-          </option>`
-        );
+        $("#game-history-level")
+        .append(
+          `<option value="${level.LevelId}">${level.LevelNumber}: ${level.LevelName}
+</option>`);
       });
       $("#game-history-level").val(e.data.storage.getLevel().LevelId);
 
@@ -484,9 +484,26 @@ class GamePrepare extends GameManager {
   }
 
   _prepareHistoryDialog(){
+
     $("#game-history-dialog").dialog({
         autoOpen: false,
         buttons: [
+          {
+            text: chrome.i18n.getMessage("buttonCopyLevelList"),
+            click: () => {
+              var result = [];
+
+              this.storage.getLevels().forEach(function (level){
+                result.push(`${level.LevelNumber}: ${level.LevelName}`);
+              });
+
+              var $tmp = $("<textarea>");
+              $("body").append($tmp);
+              $tmp.val( result.join("\n") ).select();
+              document.execCommand("copy");
+              $tmp.remove();
+            }
+          },
           {
             text: chrome.i18n.getMessage("buttonDownload"),
             click: this.gameHistoryDialogDownload
@@ -497,6 +514,10 @@ class GamePrepare extends GameManager {
           }
         ],
         width: 'auto',
+        // resizable: false,
+        position: {
+          at: 'top'
+        },
         close: this.gameHistoryDialogClose
     });
 
@@ -511,7 +532,7 @@ class GamePrepare extends GameManager {
     $("#game-history-filter").keyup(
       { storage: this.storage },
       this._fillHistoryForm
-    )
+    );
   }
 
   gameHistoryDialogClose(e){

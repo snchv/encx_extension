@@ -15,8 +15,13 @@
   },
 
   "buttonDownload": {
-    "message": "Скачать",
+    "message": "Скачать историю",
     "description": "Надпись на кнопке скачать"
+  },
+
+  "buttonCopyLevelList": {
+    "message": "Скопировать список уровней",
+    "description": "Надпись на кнопке скопировать список уровней"
   },
 
   "optionsEngineOptions": {
@@ -279,7 +284,7 @@
   },
 
   "hintPenaltyDescription": {
-    "message": "<span class=color_sec><i>Описание:</i></span> $1",
+    "message": "<span class=color_sec><b>Описание подсказки:</b></span> $1",
     "description": "Описание штрафной подсказки"
   },
 
