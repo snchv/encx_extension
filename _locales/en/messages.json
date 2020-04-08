@@ -1,11 +1,11 @@
 {
   "extensionName": {
-    "message": "EN.CX Extension - test",
+    "message": "EN.CX Extension - beta",
     "description": "Extension name"
   },
 
   "extensionDescription": {
-    "message": "Improves appearance and functionality of Encounter/Quest.Ua game engine.",
+    "message": "Improves appearance and functionality of Encounter/Quest.Ua game engine",
     "description": "Extesion description"
   },
 
@@ -15,8 +15,13 @@
   },
 
   "buttonDownload": {
-    "message": "Download",
+    "message": "Download history",
     "description": "Download button text"
+  },
+
+  "buttonCopyLevelList": {
+    "message": "Copy level list",
+    "description": "Copy level list text"
   },
 
   "optionsEngineOptions": {
@@ -60,6 +65,11 @@
     "description": "Sound notification option"
   },
 
+  "optionsEnextBarBottom": {
+    "message": "Status bar at the bottom",
+    "description": "Status bar position option"
+  },
+
   "optionsAutoFocus": {
     "message": "Automatically focus on input field",
     "description": "Autofocus option"
@@ -70,8 +80,13 @@
     "description": "Disable extension for current domain option"
   },
 
+  "optionsDisableChat": {
+    "message": "Hide chat",
+    "description": "Hide chat option"
+  },
+
   "optionsSeconds": {
-    "message": "second(s)",
+    "message": "sec.",
     "description": "Refresh rate units, seconds"
   },
 
@@ -105,6 +120,21 @@
     "description": "Options menu sectors group title"
   },
 
+  "optionsTitleBonuses": {
+    "message": "Bonuses",
+    "description": "Bonuses header in menu"
+  },
+
+  "toggleClosedBonusesOff": {
+    "message": "Hide executed",
+    "description": "Hide executed bonuses option"
+  },
+
+  "toggleClosedBonusesOn": {
+    "message": "Show executed (<span id='bonuses-closed-hidden'>$1</span>)",
+    "description": "Show executed bonuses option"
+  },
+
   "optionsGameHistoryDialog": {
     "message": "Codes history",
     "description": "Code history window title"
@@ -114,7 +144,6 @@
     "message": "Code beginning",
     "description": "Inline hint in code filter input"
   },
-
 
   "optionsContactUs": {
     "message": "Contact developer"
@@ -269,6 +298,11 @@
     "description": "Penalty hint opening button text"
   },
 
+  "levelContainsScript": {
+    "message": "Level task contains scipt.\nExtension could affect their execution.",
+    "description": "Подсказка, если в тексте уровня есть скрипты"
+  },
+
   "levelTitle": {
     "message": "Level $NUM$ of $TOTAL$$NAME$",
     "description": "Заголовок уровня",
@@ -284,6 +318,26 @@
       }
     }
   },
+
+  "bonusBlockTitle": {
+    "message": "Bonuses: <span id='bonuses-closed'>$1</span>/<span id='bonuses-total'>$2</span> (<span id='bonus-time'>$3</span>)",
+    "description": "Bonuses block header"
+   },
+
+   "bonusFreeBlockTitle": {
+     "message": "No bonuses",
+     "description": "Header if no bonuses"
+    },
+
+    "levelStart": {
+      "message": "Start: $1",
+      "description": "Level start time"
+    },
+
+    "currentTime": {
+      "message": "Updated: $1",
+      "description": "Local time when the page was last updated"
+    },
 
   "levelDuration": {
     "message": "<b>Level duration</b> $1",
@@ -301,17 +355,26 @@
   },
 
   "levelOnLevelTime": {
-    "message": "<strong>Spent on level</strong> ",
+    "message": "Time on level: ",
     "description": "Time spent on current level title"
   },
 
+  "levelIsPassed": {
+    "message": "Level is up"
+  },
+
   "levelAutoUpPenalty": {
-    "message": "(penalty $1)",
+    "message": " (penalty $1)",
     "description": "Timeout penalty size"
   },
 
+  "levelAutoUpNoPenalty": {
+    "message": " (without penalty)",
+    "description": "Without timeout penalty"
+  },
+
   "sectorsCount": {
-    "message": "There are <span id='sectors-total'>$TOTAL$</span> sectors [to close: $TRESHOLD$] <span class=color_sec>(<span id='sectors-left'>$LEFT$</span> left, <span id='sectors-speed'>$SPEED$</span>)</span>",
+    "message": "Sectors: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(threshold: $TRESHOLD$, left <span id='sectors-left'>$LEFT$</span>) <span id='sectors-speed' class=color_dis>$SPEED$</span></span>",
     "description": "Sectors information",
     "placeholders": {
       "total": {
@@ -330,22 +393,28 @@
   },
 
   "sectorsSpeed": {
-    "message": "closing 1 sector per $1",
+    "message": "&nbsp;average timeper sector $1",
     "description": "Sector closing speed"
   },
 
-  "bonusesClosedSummary": {
-    "message": "$1 bonus(es) completed on current level\nBonus time: $2"
+  "sectorsToggle": {
+    "message": "Unclosed sectors",
+    "description": "Unclosed sectors display setting"
   },
 
   "sectorsDisclosed": {
-    "message": "Disclosed sectors: <span id='sectors-left-list'>$1</span>",
-    "description": "Disclosed sector list"
+    "message": "<span class=normalText>Unclosed: <span id='sectors-left-list'>$1</span></span>",
+    "description": "Unclosed sectors list"
   },
+
 
   "sectorDisclosed": {
     "message": "no code passed",
     "description": "Unclosed sector mark"
+  },
+
+  "bonusesClosedSummary": {
+    "message": "$1 bonus(es) completed on current level\nBonus time: $2"
   },
 
   "titleTask": {
@@ -384,8 +453,24 @@
   },
 
   "menuBonuses": {
-    "message": "Bonus",
+    "message": "Bonuses",
     "description": "Bonus and penalty menu button title"
+  },
+
+  "titleUserInfo": {
+    "message": "Profile"
+  },
+
+  "titleUserLogin": {
+    "message": "Login: "
+  },
+
+  "titleUserTeam": {
+    "message": "Team: "
+  },
+
+  "titleGameForum": {
+    "message": "Discuss game"
   },
 
   "engineErrorNeedRelogin": {
