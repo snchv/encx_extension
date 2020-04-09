@@ -30,7 +30,14 @@ class GameLevelListManager extends GameManager {
 
   initialize(storage){
     if (storage.isStormGame()){
+      // this.activeLevel = storage.getLevelId();
+
+    if (storage.isFirstLoad()) {
+      this.activeLevel = (storage.getLevels().find(item => item.LevelNumber == (getUrlVars()["level"] || 1) )).LevelId;
+    } else {
       this.activeLevel = storage.getLevelId();
+    }
+
       $("div.content")
         .append(this._levelListTemplate(storage.getGame()));
     }
