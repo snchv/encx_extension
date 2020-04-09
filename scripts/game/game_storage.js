@@ -26,8 +26,11 @@ class GameStorage {
   constructor() {
     // TODO: make workaround when we start from closed level
     this.levelHash = {
-      LevelId: $(".aside input[name=LevelId]").val(),
-      LevelNumber: $(".aside input[name=LevelNumber]").val()
+      // LevelId: $(".aside input[name=LevelId]").val(),
+      // LevelNumber: $(".aside input[name=LevelNumber]").val()
+
+      LevelId: $(".aside input[name=LevelId]").val() || null,
+      LevelNumber: $(".aside input[name=LevelNumber]").val() || getUrlVars()["level"] || 1
     }
 
     // Last API bundle

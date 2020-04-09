@@ -62,8 +62,7 @@ class GameTaskManager extends GameManager {
   initialize(storage){
 
     $("div.content")
-      .append(storage.isStormGame() ? "" : this._titleTemplate(storage.getGame()))
-      .append(storage.isStormGame() ? "" : $("<div>").addClass("spacer"))
+      .append(this._titleTemplate(storage, storage.getGame()))
       .append(this._timeoutTemplate(storage, storage.getLevel()))
       .append(this._sectorsTitleTemplate(storage, storage.getLevel()))
       .append(this._sectorsTemplate(storage.getLevel()))
@@ -176,7 +175,8 @@ class GameTaskManager extends GameManager {
     }
   }
 
-  _titleTemplate(game){
+  _titleTemplate(storage, game){
+    if (storage.isStormGame()) return "";
     return $("<div>").addClass("level-length")
       .append(
         $("<h2> content")
@@ -188,23 +188,8 @@ class GameTaskManager extends GameManager {
             game.Level.Name != "" ? `: ${game.Level.Name}`: ""
           ])
         )
-      );
-            // // level start time
-            // .append(
-            //   $("<span>").addClass("color_dis").css("white-space", "nowrap")
-            //   .append(chrome.i18n.getMessage("levelStart", [ENEXT.convertTimestamp(level.StartTime.Value, 'readable')]))
-            // )
-
-          // // level timeout
-          // .append(
-          //   $("<li>").addClass("color_sec")
-          //   .append(
-          //     game.Level.Timeout > 0
-          //       ? chrome.i18n.getMessage("levelDuration", [ENEXT.convertTime(game.Level.Timeout)])
-          //       : chrome.i18n.getMessage("levelInfinite")
-          //   )
-          // )
-        // .append($("<div>").addClass("spacer"));
+      )
+        .append($("<div>").addClass("spacer"));
   }
 
   _timeoutTemplate(level){
