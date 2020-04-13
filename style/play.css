@@ -286,7 +286,8 @@ div#level-stat-dialog iframe {
 .bonus-answered .bonus-task {
 	border: 1px solid #656565;
 	border-radius: 3px;
-	padding: 10px 10px 5px 10px;
+	padding: 15px 15px 0 15px;
+  margin: 5px 0 10px 0;
   background-color: rgba(0,100,0,0.1);
 	/* background-color: #636363 transparent; */
 }
@@ -324,6 +325,7 @@ a.dashed:hover {
 }
 
 a.options {
+  margin-left: 8px;
   font-weight: normal;
   border-color:#808080;
   color: #808080;

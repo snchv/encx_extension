@@ -125,14 +125,9 @@
     "description": "Bonuses header in menu"
   },
 
-  "toggleClosedBonusesOff": {
-    "message": "Hide executed",
-    "description": "Hide executed bonuses option"
-  },
-
-  "toggleClosedBonusesOn": {
-    "message": "Show executed (<span id='bonuses-closed-hidden'>$1</span>)",
-    "description": "Show executed bonuses option"
+  "toggleClosedBonusTask": {
+    "message": "Bonus task",
+    "description": "Executed bonus task display"
   },
 
   "optionsGameHistoryDialog": {
@@ -204,12 +199,12 @@
   },
 
   "bonusNumber": {
-    "message": "Bonus $1",
+    "message": "Bonus $1 ",
     "description": "'Bonus' word and number"
   },
 
   "bonusNumberName": {
-    "message": "Bonus $1: $2&nbsp;",
+    "message": "Bonus $1: $2 ",
     "description": "'Bonus' word with name and number"
   },
 
@@ -393,7 +388,7 @@
   },
 
   "sectorsSpeed": {
-    "message": "&nbsp;average timeper sector $1",
+    "message": " average timeper sector $1 ",
     "description": "Sector closing speed"
   },
 

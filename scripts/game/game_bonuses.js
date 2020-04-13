@@ -70,12 +70,12 @@ class GameBonusManager extends GameManager {
     //   )
     //   .tooltip();
 
-    // Adjust iframe sizes
+    // Adjust iframe sizes (+10 to resize frame after the contents are modified)
     $("div#bonuses iframe").each(
       function(ind, frame){
         frame.onload = function(){
-          this.height = this.contentWindow.document.body.scrollHeight;
-          this.width = this.contentWindow.document.body.scrollWidth;
+          this.height = this.contentWindow.document.body.scrollHeight + 10;
+          this.width = this.contentWindow.document.body.scrollWidth + 10;
         }
       }
     );
@@ -93,71 +93,11 @@ class GameBonusManager extends GameManager {
 
   }
 
-  // _titleBonusBlockTemplate(){
-  //
-  //   // toggle closed bonuses
-  //   $(function() {
-  //     $('.toggle_closedBonuses').on('click', function() {
-  //
-  //       localStorage.setItem(
-  //         `${gameStorage.getGameId()}-hide-complete-bonuses`,
-  //         !isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)
-  //       );
-  //
-  //       $('.closedBonuses_toggle').toggle();
-  //       if (isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)) $(".bonus-answered").hide();
-  //       else $(".bonus-answered").show();
-  //
-  //       // gameStorage.update();
-  //       console.log('hide-complete-bonuses: ' + isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`));
-  //       return false;
-  //     });
-  //   });
-  //
-  //
-  //   return $("<div>").addClass("color_bonus bonusHeader")
-  //   // .attr("id", "sectors-left-list-block")
-  //   .append(
-  //     $("<h3>").addClass("color_bonus")
-  //     .append(chrome.i18n.getMessage(
-  //       "bonusBlockTitle",
-  //       [
-  //         this.storage.getCompletedBonusesData()[0],
-  //         this.storage.getBonuses().length,
-  //         this.storage.getCompletedBonusesData()[1],
-  //       ]
-  //     )
-  //     )
-  //
-  //     .append("&nbsp;&nbsp;")
-  //
-  //
-  //     .append(
-  //       $("<a>").addClass("dashed options toggle_closedBonuses")
-  //       .append(
-  //         $("<span>").addClass("closedBonuses_toggle").css('display', function() {
-  //           if (isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)) return 'none'
-  //           else return 'inline'
-  //         })
-  //         .append(chrome.i18n.getMessage("toggleClosedBonusesOff"))
-  //       )
-  //       .append(
-  //         $("<span>").addClass("closedBonuses_toggle").css('display', function() {
-  //           if (isOptionTrue(`${gameStorage.getGameId()}-hide-complete-bonuses`)) return 'inline'
-  //           else return 'none'
-  //         })
-  //         .append(chrome.i18n.getMessage(
-  //           "toggleClosedBonusesOn", [this.storage.getCompletedBonusesData()[0]]
-  //         ))
-  //       )
-  //       )
-  //   )
-  // }
-
   _bonusInfoTemplate(bonus){
     return $("<span>")
       .addClass("color_sec")
-      .append(`(${ENEXT.convertTimestamp(bonus.Answer.AnswerDateTime.Value, 'encounter')} `)
+      .append(" (")
+      .append(`${ENEXT.convertTimestamp(bonus.Answer.AnswerDateTime.Value, 'encounter')} `)
       .append(
         $("<a>")
           .attr("href", `/userdetails.aspx?uid=${bonus.Answer.UserId}`)
@@ -170,7 +110,7 @@ class GameBonusManager extends GameManager {
         $("<span>").addClass("color_bonus")
         .append(bonus.Answer.Answer)
 	    )
-      .append(")");
+      .append(") ");
   }
 
   _tabHeaderTemplate(title, href){
@@ -192,9 +132,72 @@ class GameBonusManager extends GameManager {
       )
   }
 
+  _bonusOpenTaskTemplate(bonus){
+    $(function() {
+      $(`#bonus-${bonus.BonusId}-toggle`).on('click', function() {
+
+        if ($(this).hasClass('click1')) {
+          $(`#bonus-${bonus.BonusId}-task`).toggle(200);
+          $(`#bonus-${bonus.BonusId}-task`).remove();
+
+        } else {
+          $(`#bonus-${bonus.BonusId} h3:first`)
+          .after(
+            $("<div>")
+            .addClass("bonus-task").css('display', 'none')
+            .attr("id", `bonus-${bonus.BonusId}-task`)
+            .append(encx_tpl.iframeSandbox((bonus.Task || '').replace(/\r\n/g, "<br>")))
+          );
+          $(`div#bonus-${bonus.BonusId} iframe`).each(
+            function(ind, frame){
+              frame.onload = function(){
+                this.height = this.contentWindow.document.body.scrollHeight + 10;
+                this.width = this.contentWindow.document.body.scrollWidth + 10;
+              }
+            }
+          );
+          $(`#bonus-${bonus.BonusId}-task`).toggle(200);
+        }
+
+        $(this).toggleClass('click1');
+        return false;
+
+      });
+    });
+
+    return $("<div>")
+    .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
+    .append(
+      (this.showBonusTask && (bonus.Task || '').length > 0)
+        ? $("<div>")
+            .addClass("bonus-task")
+            .attr("id", `bonus-${bonus.BonusId}-task`)
+            .append(encx_tpl.iframeSandbox((bonus.Task || '').replace(/\r\n/g, "<br>")))
+        : ''
+    );
+  }
+
   _bonusOpenTemplate(bonus){
     return $("<div>")
       .addClass("bonus")
+      .append(this._bonusOpenTaskTemplate(bonus))
+
+      // .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
+      // .append(
+      //   (this.showBonusTask && (bonus.Task || '').length > 0)
+      //     ? $("<div>")
+      //         .addClass("bonus-task")
+      //         .attr("id", `bonus-${bonus.BonusId}-task`)
+      //
+      // // Bonus in sandbox
+      //         .append(
+      //           encx_tpl.iframeSandbox(
+      //             (bonus.Task || '').replace(/\r\n/g, "<br>")
+      //           )
+      //         )
+      //     : ''
+      // )
+
       .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-hint`))
       .append(
         $("<div>")
@@ -202,21 +205,6 @@ class GameBonusManager extends GameManager {
           .attr("id", `bonus-${bonus.BonusId}-hint`)
           .append((bonus.Help) ? (`<p>${bonus.Help}</p>`).replace(/\r\n/g, "<br>") : "")
         )
-      .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
-      .append(
-        (this.showBonusTask && (bonus.Task || '').length > 0)
-          ? $("<div>")
-              .addClass("bonus-task")
-              .attr("id", `bonus-${bonus.BonusId}-task`)
-
-      // Bonus in sandbox
-              .append(
-                encx_tpl.iframeSandbox(
-                  (bonus.Task || '').replace(/\r\n/g, "<br>")
-                )
-              )
-          : ''
-      )
       .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-code`))
       .append(
         this.showBonusCode
@@ -311,15 +299,25 @@ class GameBonusManager extends GameManager {
                     chrome.i18n.getMessage("timerLeft")
                   )
                 )
-                .append(")")
+                .append(") ")
             : ""
           )
           .append(
             bonus.IsAnswered
-              ? $("<span>")
-                  .addClass("color_sec")
-                  .append(this._bonusInfoTemplate(bonus))
+              // ? $("<span>")
+              //     .addClass("color_sec")
+              //     .append(this._bonusInfoTemplate(bonus))
+              ? this._bonusInfoTemplate(bonus)
               : ""
+          )
+          .append ( () => {
+            if (!this.showBonusTask && bonus.IsAnswered && bonus.Task) {
+              return $("<a>").addClass("options dashed")
+              .attr("id", `bonus-${bonus.BonusId}-toggle`)
+              .append(chrome.i18n.getMessage("toggleClosedBonusTask"));
+            }
+            return "";
+          }
           )
       )
       .append(

@@ -125,14 +125,9 @@
     "description": "Заголовок группы настроек бонусов в меню"
   },
 
-  "toggleClosedBonusesOff": {
-    "message": "Скрыть выполненные",
-    "description": "Скрыть выполненные бонусы"
-  },
-
-  "toggleClosedBonusesOn": {
-    "message": "Показать выполненные (<span id='bonuses-closed-hidden'>$1</span>)",
-    "description": "Показать выполненные бонусы"
+  "toggleClosedBonusTask": {
+    "message": "Задание",
+    "description": "Отображение задания выполненного бонуса"
   },
 
   "optionsGameHistoryDialog": {
@@ -204,12 +199,12 @@
   },
 
   "bonusNumber": {
-    "message": "Бонус $1&nbsp;",
+    "message": "Бонус $1 ",
     "description": "Слово 'Бонус' с номером"
   },
 
   "bonusNumberName": {
-    "message": "Бонус $1: $2&nbsp;",
+    "message": "Бонус $1: $2 ",
     "description": "Бонус с номером и названием"
   },
 
@@ -394,7 +389,7 @@
   },
 
   "sectorsSpeed": {
-    "message": "&nbsp;закрываем сектор за $1",
+    "message": " закрываем сектор за $1 ",
     "description": "Скорость закрытия секторов"
   },
 

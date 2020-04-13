@@ -255,7 +255,6 @@ class GameTaskManager extends GameManager {
       )
 
       // toggle link
-      .append("&nbsp;&nbsp;")
       .append(
         $("<a>").addClass("dashed options toggle_disclosedSectors")
         .append(chrome.i18n.getMessage("sectorsToggle"))
