@@ -137,10 +137,11 @@ class GameBonusManager extends GameManager {
       $(`#bonus-${bonus.BonusId}-toggle`).on('click', function() {
 
         if ($(this).hasClass('click1')) {
-          $(`#bonus-${bonus.BonusId}-task`).toggle(200);
-          $(`#bonus-${bonus.BonusId}-task`).remove();
-
+          $(`#bonus-${bonus.BonusId}-task`).slideToggle(200, function () {
+            $(`#bonus-${bonus.BonusId}-task`).remove();
+          });
         } else {
+          $(`#bonus-${bonus.BonusId}-task`).remove();
           $(`#bonus-${bonus.BonusId} h3:first`)
           .after(
             $("<div>")
@@ -156,7 +157,7 @@ class GameBonusManager extends GameManager {
               }
             }
           );
-          $(`#bonus-${bonus.BonusId}-task`).toggle(200);
+          $(`#bonus-${bonus.BonusId}-task`).slideToggle(200);
         }
 
         $(this).toggleClass('click1');
