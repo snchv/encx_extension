@@ -44,6 +44,13 @@ class GameTaskManager extends GameManager {
         result.push(" " + sectors[i].Name);
       }
     }
+
+    // if (storage.getSectors().length > 10){
+    //   $("#sectors").addClass("sectors-column");
+    // } else {
+    //   $("#sectors").removeClass("sectors-column");
+    // }
+
     return uniq_fast(result);
   }
 
@@ -136,14 +143,14 @@ class GameTaskManager extends GameManager {
       $("#sectors-total").html(storage.getSectorNumber());
       $("#sectors-left").html(storage.getSectorsLeft());
       $("#sectors-left-list").html(
-        this._openSectorList(storage.getSectors())
+        this._openSectorList(storage.getSectors()).join('<br>')
       );
       $("#sectors-speed").html(this._sectorsClosingSpeed(storage));
 
       if (isOptionTrue(`${storage.getGameId()}-hide-disclosed-sectors`)){
-        $("#sectors-left-list-block").hide();
+        $("#sectors-left-list").hide();
       } else {
-        $("#sectors-left-list-block").show();
+        $("#sectors-left-list").show();
       }
     }
 
@@ -229,11 +236,12 @@ class GameTaskManager extends GameManager {
           !isOptionTrue(`${storage.getGameId()}-hide-disclosed-sectors`)
         );
 
-        $('.disclosed_sectors').toggle();
-        if (isOptionTrue(`${storage.getGameId()}-hide-disclosed-sectors`)) $("#sectors-left-list-block").hide();
-        else $("#sectors-left-list-block").show();
+        // $('.disclosed_sectors').toggle();
 
-        // gameStorage.update();
+        if (isOptionTrue(`${storage.getGameId()}-hide-disclosed-sectors`)) {
+          $("#sectors-left-list").hide();
+        } else $("#sectors-left-list").show();
+
         return false;
       });
     });
@@ -263,8 +271,14 @@ class GameTaskManager extends GameManager {
       // toggle Block
       .append(
         $("<div>").addClass('disclosed_sectors').css("font-weight", "normal")
-          .attr("id", "sectors-left-list-block")
-          .append(chrome.i18n.getMessage("sectorsDisclosed",[this._openSectorList(level.Sectors)]))
+          .addClass(
+            this._openSectorList(level.Sectors).length > 10
+            ? "sectors-column"
+            : ""
+          )
+          .attr("id", "sectors-left-list")
+          .append(this._openSectorList(level.Sectors).join('<br>'))
+          // .append(chrome.i18n.getMessage("sectorsDisclosed",[this._openSectorList(level.Sectors).join('<br>')]))
         )
     );
 

@@ -116,6 +116,7 @@ class GameStorage {
         return encx_tpl.errorPlayerLimitExceeded();
       // case 17: // game is over
       // case 19: // level is not issued (?)
+      // case 20: // ???
       // case 22: // level is over (?)
       default:
         return encx_tpl.errorUnknown(this.last.Event);
@@ -213,9 +214,16 @@ class GameStorage {
       return this.update({}, true);
     }
 
+    if (data.Level === null && data.Event === 20) {
+      return this.update({}, true);
+    }
 
     if (data.Level === null && data.Event === 22) {
       return this.update({}, true);
+    }
+
+    if (data.Level === null && data.Event === 17) {
+      location.reload(true);
     }
 
     this.prev = this.last;
@@ -247,6 +255,45 @@ class GameStorage {
   // Return current level
   getLevel(){
     return this.last.Level;
+  }
+
+  // return all text fields of current level as array
+  getLevelText(){
+    var result = [];
+
+    result.push(this.last.Level.Name);
+
+    this.last.Level.Tasks.forEach((task) => {
+      result.push(task.TaskTextFormatted);
+    });
+
+    this.last.Level.Messages.forEach((message) => {
+      result.push(message.MessageText);
+    });
+
+    this.last.Level.Sectors.forEach((sector) => {
+      result.push(sector.Name)
+    });
+
+    this.last.Level.Helps.forEach((help) => {
+      result.push(help.HelpText);
+      result.push(help.PenaltyComment);
+      result.push(help.PenaltyMessage);
+    });
+
+    this.last.Level.PenaltyHelps.forEach((penalty) => {
+      result.push(penalty.HelpText);
+      result.push(penalty.PenaltyComment);
+      result.push(penalty.PenaltyMessage);
+    });
+
+    this.last.Level.Bonuses.forEach((bonus) => {
+      result.push(bonus.Name);
+      result.push(bonus.Task);
+      result.push(bonus.Help);
+    });
+
+    return result.filter(Boolean);
   }
 
   getLevels(){

@@ -62,32 +62,13 @@ class GamePrepare extends GameManager {
         .before(
           this._gameHistoryDialogTemplate()
         );
-
       this._prepareHistoryDialog();
-
-      // Add bonuses and penalty button
-      // $(".header ul .enext-bonuses").remove();
-      // $(".header ul")
-      //   .append(
-      //     $("<li>")
-      //       .addClass("enext-bonuses")
-      //       .append(
-      //         $("<a>")
-      //           .append($("<i>"))
-      //           .append(
-      //             $("<span>").append(chrome.i18n.getMessage("menuBonuses"))
-      //           )
-      //           .attr("href", storage.getBonusesURL())
-      //           .attr("target", "_blank")
-      //       )
-      //   );
     }
 
     $("div.container")
     .append(this._infoBlock(storage, storage.getGame(), storage.getLevel()));
 
     $("div.content").empty();
-    // console.log( document.body.clientHeight / Number.parseFloat(+/\d+.\d/.exec($('#ChatFrame').attr('style'))) );
   }
 
   update (storage) {
@@ -112,15 +93,15 @@ class GamePrepare extends GameManager {
       () => { $(".enext-block").removeClass("enext-block-bottom"); }
     );
 
-    // isOptionTruePromise(`${this.storage.getGameId()}-disable-chat`).then(
-    //   () => { $('#ChatForm, #ChatFrame').hide(); },
-    //   () => { $('#ChatForm, #ChatFrame').show(); }
-    // );
-
     isOptionTruePromise(`${this.storage.getGameId()}-disable-chat`).then(
       () => { $('#ChatForm').hide(); },
       () => { $('#ChatForm').show(); }
     );
+
+    // update script alert
+    $(".enext-alert").remove();
+    $("div.enext-block ul")
+      .prepend(this._levelScriptsAlert(storage, storage.getLevel()));
   }
 
   showLevelStat(event){
@@ -201,8 +182,6 @@ class GamePrepare extends GameManager {
     return $("<div>").addClass("enext-block")
      .append(
       $("<ul>")
-      // TODO search script in text
-      .append(this._levelScriptsAlert(storage, level))
 
       .append($("<li>").addClass("enext-level-timer")
       .append(this._levelTimer(level)
@@ -266,7 +245,11 @@ class GamePrepare extends GameManager {
   _levelScriptsAlert(storage, level) {
     if (level.IsPassed) return "";
 
-    if ( storage.getTaskText().includes('</script>') )
+    function containsScript(text) {
+      return text.includes('</script>');
+    }
+
+    if (storage.getLevelText().some(containsScript))
     return $("<li>").addClass("enext-alert")
             .append(
               $("<span>").addClass("alerts")
@@ -395,8 +378,7 @@ class GamePrepare extends GameManager {
       e.data.storage.getLevels().forEach(function (level){
         $("#game-history-level")
         .append(
-          `<option value="${level.LevelId}">${level.LevelNumber}: ${level.LevelName}
-</option>`);
+          `<option value="${level.LevelId}">${level.LevelNumber}: ${level.LevelName}</option>`);
       });
       $("#game-history-level").val(e.data.storage.getLevel().LevelId);
 

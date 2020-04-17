@@ -59,29 +59,18 @@ class GameBonusManager extends GameManager {
     );
     $(".bonus-block[delete-mark=true]").remove();
 
-    // Bonuses on current level summary
-    // $("li.enext-bonuses")
-    //   .attr(
-    //     "title",
-    //     chrome.i18n.getMessage(
-    //       "bonusesClosedSummary",
-    //       storage.getCompletedBonusesData()
-    //     )
-    //   )
-    //   .tooltip();
-
     // Adjust iframe sizes (+10 to resize frame after the contents are modified)
     $("div#bonuses iframe").each(
       function(ind, frame){
         frame.onload = function(){
           this.height = this.contentWindow.document.body.scrollHeight + 10;
-          this.width = this.contentWindow.document.body.scrollWidth + 10;
+          // this.width = this.contentWindow.document.body.scrollWidth + 10;
+          this.width = '100%';
         }
       }
     );
 
     this.hideBonuses ? $(".bonus-answered").hide() : $(".bonus-answered").show();
-
 
     // update bonus summary info
     if (storage.getBonuses().length > 0) {
@@ -90,7 +79,6 @@ class GameBonusManager extends GameManager {
       $("#bonuses-total").html(storage.getBonuses().length);
       $("#bonus-time").html(storage.getCompletedBonusesData()[1]);
     }
-
   }
 
   _bonusInfoTemplate(bonus){
@@ -132,28 +120,25 @@ class GameBonusManager extends GameManager {
       )
   }
 
-  _bonusOpenTaskTemplate(bonus){
+  _bonusOpenTemplate(bonus){
     $(function() {
       $(`#bonus-${bonus.BonusId}-toggle`).on('click', function() {
 
         if ($(this).hasClass('click1')) {
           $(`#bonus-${bonus.BonusId}-task`).slideToggle(200, function () {
-            $(`#bonus-${bonus.BonusId}-task`).remove();
+            $(this).empty();
           });
         } else {
-          $(`#bonus-${bonus.BonusId}-task`).remove();
-          $(`#bonus-${bonus.BonusId} h3:first`)
-          .after(
-            $("<div>")
-            .addClass("bonus-task").css('display', 'none')
-            .attr("id", `bonus-${bonus.BonusId}-task`)
-            .append(encx_tpl.iframeSandbox((bonus.Task || '').replace(/\r\n/g, "<br>")))
-          );
+          $(`#bonus-${bonus.BonusId}-task`)
+          .empty()
+          .addClass("bonus-task").css('display', 'none')
+          .append(encx_tpl.iframeSandbox((bonus.Task || '').replace(/\r\n/g, "<br>")));
           $(`div#bonus-${bonus.BonusId} iframe`).each(
             function(ind, frame){
               frame.onload = function(){
                 this.height = this.contentWindow.document.body.scrollHeight + 10;
-                this.width = this.contentWindow.document.body.scrollWidth + 10;
+                // this.width = this.contentWindow.document.body.scrollWidth + 10;
+                this.width = '100%';
               }
             }
           );
@@ -162,59 +147,50 @@ class GameBonusManager extends GameManager {
 
         $(this).toggleClass('click1');
         return false;
-
       });
     });
 
     return $("<div>")
-    .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
-    .append(
-      (this.showBonusTask && (bonus.Task || '').length > 0)
-        ? $("<div>")
-            .addClass("bonus-task")
-            .attr("id", `bonus-${bonus.BonusId}-task`)
-            .append(encx_tpl.iframeSandbox((bonus.Task || '').replace(/\r\n/g, "<br>")))
-        : ''
-    );
-  }
-
-  _bonusOpenTemplate(bonus){
-    return $("<div>")
       .addClass("bonus")
-      .append(this._bonusOpenTaskTemplate(bonus))
-
-      // .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
-      // .append(
-      //   (this.showBonusTask && (bonus.Task || '').length > 0)
-      //     ? $("<div>")
-      //         .addClass("bonus-task")
-      //         .attr("id", `bonus-${bonus.BonusId}-task`)
-      //
-      // // Bonus in sandbox
-      //         .append(
-      //           encx_tpl.iframeSandbox(
-      //             (bonus.Task || '').replace(/\r\n/g, "<br>")
-      //           )
-      //         )
-      //     : ''
-      // )
+      .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-task`))
+      .append(
+        (this.showBonusTask && (bonus.Task || '').length > 0)
+          ? $("<div>")
+              .attr("id", `bonus-${bonus.BonusId}-task`)
+              .addClass("bonus-task")
+              .append(
+                encx_tpl.iframeSandbox(
+                  (bonus.Task || '').replace(/\r\n/g, "<br>")
+                )
+              )
+          : $("<div>")
+              .attr("id", `bonus-${bonus.BonusId}-task`)
+      )
 
       .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-hint`))
       .append(
-        $("<div>")
-          .addClass("bonus-hint")
-          .attr("id", `bonus-${bonus.BonusId}-hint`)
-          .append((bonus.Help) ? (`<p>${bonus.Help}</p>`).replace(/\r\n/g, "<br>") : "")
-        )
-      .append(encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-code`))
-      .append(
-        this.showBonusCode
+        bonus.Help
           ? $("<div>")
-              .addClass("bonus-code")
-              .attr("id", `bonus-${bonus.BonusId}-code`)
-              .append(bonus.Answer.Answer)
-          : ''
-      );
+              .addClass("bonus-hint")
+              .attr("id", `bonus-${bonus.BonusId}-hint`)
+              .append((`<p>${bonus.Help}</p>`).replace(/\r\n/g, "<br>"))
+          : $("<div>")
+              .attr("id", `bonus-${bonus.BonusId}-hint`)
+        );
+
+      // .append(
+      //   this.showBonusCode
+      //     ? encx_tpl.documentWriteOverride(`#bonus-${bonus.BonusId} .bonus-code`)
+      //     : ""
+      //   )
+      // .append(
+      //   this.showBonusCode
+      //     ? $("<div>")
+      //         .addClass("bonus-code")
+      //         .attr("id", `bonus-${bonus.BonusId}-code`)
+      //         .append(bonus.Answer.Answer)
+      //     : ''
+      // );
   }
 
   _bonusClosedTemplate(bonus){
@@ -305,9 +281,6 @@ class GameBonusManager extends GameManager {
           )
           .append(
             bonus.IsAnswered
-              // ? $("<span>")
-              //     .addClass("color_sec")
-              //     .append(this._bonusInfoTemplate(bonus))
               ? this._bonusInfoTemplate(bonus)
               : ""
           )

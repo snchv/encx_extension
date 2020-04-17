@@ -126,7 +126,7 @@
   },
 
   "toggleClosedBonusTask": {
-    "message": "Bonus task",
+    "message": "bonus task",
     "description": "Executed bonus task display"
   },
 
@@ -279,7 +279,7 @@
   },
 
   "hintPenaltyDescription": {
-    "message": "<b>Hint description:</b> $1",
+    "message": "<b>Description:</b> $1",
     "description": "Penalty hint description"
   },
 
@@ -369,7 +369,7 @@
   },
 
   "sectorsCount": {
-    "message": "Sectors: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(threshold: $TRESHOLD$, left <span id='sectors-left'>$LEFT$</span>) <span id='sectors-speed' class=color_dis>$SPEED$</span></span>",
+    "message": "Sectors: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(threshold: $TRESHOLD$, left <span id='sectors-left'>$LEFT$</span>) <span id='sectors-speed' class=color_dis style='margin-left:8px;'>$SPEED$</span></span>",
     "description": "Sectors information",
     "placeholders": {
       "total": {
@@ -393,12 +393,12 @@
   },
 
   "sectorsToggle": {
-    "message": "Unclosed sectors",
+    "message": "unclosed sectors",
     "description": "Unclosed sectors display setting"
   },
 
   "sectorsDisclosed": {
-    "message": "<span class=normalText>Unclosed: <span id='sectors-left-list'>$1</span></span>",
+    "message": "<span class=normalText><span id='sectors-left-list'>$1</span></span>",
     "description": "Unclosed sectors list"
   },
 

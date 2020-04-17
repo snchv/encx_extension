@@ -126,7 +126,7 @@
   },
 
   "toggleClosedBonusTask": {
-    "message": "Задание",
+    "message": "задание",
     "description": "Отображение задания выполненного бонуса"
   },
 
@@ -279,7 +279,7 @@
   },
 
   "hintPenaltyDescription": {
-    "message": "<span class=color_sec><b>Описание подсказки:</b></span> $1",
+    "message": "<span class=color_sec><b>Описание:</b></span> $1",
     "description": "Описание штрафной подсказки"
   },
 
@@ -370,7 +370,7 @@
   },
 
   "sectorsCount": {
-    "message": "Секторов: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(порог: $TRESHOLD$, осталось закрыть <span id='sectors-left'>$LEFT$</span>) <span id='sectors-speed' class=color_dis>$SPEED$</span></span>",
+    "message": "Секторов: <span id='sectors-total'>$TOTAL$</span> <span class=color_sec>(порог: $TRESHOLD$, осталось закрыть <span id='sectors-left'>$LEFT$</span>) <span id='sectors-speed' class=color_dis style='margin-left:8px;'>$SPEED$</span></span>",
     "description": "Информация о количестве секторов",
     "placeholders": {
       "total": {
@@ -394,12 +394,12 @@
   },
 
   "sectorsToggle": {
-    "message": "Незакрытые сектора",
+    "message": "незакрытые сектора",
     "description": "Настройка отображения незакрытых секторов"
   },
 
   "sectorsDisclosed": {
-    "message": "<span class=normalText>Не закрыты: <span id='sectors-left-list'>$1</span></span>",
+    "message": "<span class=normalText><span id='sectors-left-list'>$1</span></span>",
     "description": "Список незакрытых секторов"
   },
 

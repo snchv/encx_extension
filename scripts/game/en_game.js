@@ -190,7 +190,7 @@ var ENEXT = {
         }
 
         if (result === "")
-          result = chrome.i18n.getMessage("timeSec", [0]);
+          result = chrome.i18n.getMessage("timeSec", pad([0]));
 
         return $.trim(result);
     }

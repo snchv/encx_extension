@@ -236,7 +236,7 @@ class Templates {
           ${this.styles}
           ${this.scripts}
           <style>
-            body.iframe { background: 0; min-width: 0; }
+            body.iframe { background: 0; min-width: 630px; }
             html, body.iframe { height: auto; width: auto; }
             body.iframe div.content { margin: 0; padding: 0; }
           </style>
@@ -245,7 +245,7 @@ class Templates {
           <div class="content">
             <div class="bonuses">
               <div class="bonus">
-                ${content}
+               ${content}
               </div>
             </div>
           </div>

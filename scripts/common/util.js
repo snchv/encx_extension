@@ -87,16 +87,24 @@ function isDomainEnabled(){
 function uniq_fast(array) {
       var seen = {};
       var out = [];
-      var len = array.length;
-      var j = 0;
-      for(var i = 0; i < len; i++) {
-           var item = array[i];
-           if(seen[item] !== 1) {
-                 seen[item] = 1;
-                 out[j++] = item;
-           }
+      var i = 0, j = 0;
+      for(i = 0; i < array.length; i++) {
+        var item = array[i];
+        if(seen[item] !== 1) {
+          seen[item] = 1;
+          out[j++] = item;
+        }
       }
-      return String(out);
+      for(j = 0; j < out.length; j++) {
+        var count = 0;
+        for (i = 0; i < array.length; i++) {
+          if (out[j] == array[i]) {
+            count++;
+          }
+        }
+        (count > 1) ? out[j] += ' (' + count + ')' : '';
+      }
+      return out;
   }
 
   function getUrlVars()
