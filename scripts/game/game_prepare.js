@@ -100,7 +100,7 @@ class GamePrepare extends GameManager {
 
     // update script alert
     $(".enext-alert").remove();
-    $("div.enext-block ul")
+    $("div.enext-block ul.leveldetails")
       .prepend(this._levelScriptsAlert(storage, storage.getLevel()));
   }
 
@@ -181,7 +181,7 @@ class GamePrepare extends GameManager {
 
     return $("<div>").addClass("enext-block")
      .append(
-      $("<ul>")
+      $("<ul>").addClass("leveldetails")
 
       .append($("<li>").addClass("enext-level-timer")
       .append(this._levelTimer(level)
