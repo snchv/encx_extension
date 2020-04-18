@@ -4,7 +4,7 @@
 
 .enext-block {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: #d8d8d8;
   line-height: 18px;
   position: fixed;
@@ -24,6 +24,7 @@
 .enext-block-bottom {
   bottom: 0;
   top: auto;
+  font-size: 13px;
   padding: 4px 0 8px 0;
   /* line-height: 1.5em; */
 }
@@ -45,7 +46,7 @@
   padding: 0;
   opacity: inherit;
   animation: blink 1s;
-  animation-iteration-count: 0;
+  animation-iteration-count: 1;
 }
 
 @keyframes blink { 50% { opacity: 0;}  }

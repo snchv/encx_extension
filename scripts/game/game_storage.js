@@ -114,10 +114,10 @@ class GameStorage {
         return encx_tpl.errorNotInActiveStaff();
       case 13:
         return encx_tpl.errorPlayerLimitExceeded();
-      // case 17: // game is over
-      // case 19: // level is not issued (?)
-      // case 20: // ???
-      // case 22: // level is over (?)
+      case 17: break; // game is over
+      case 19: break; // level is not issued (?)
+      case 20: break; // ???
+      case 22: break; // level is over (?)
       default:
         return encx_tpl.errorUnknown(this.last.Event);
     }
@@ -210,6 +210,10 @@ class GameStorage {
 
   storeAPI(data){
 
+    if (data.Level === null && data.Event === 17) {
+      location.reload(true);
+    }
+
     if (data.Level === null && data.Event === 19) {
       return this.update({}, true);
     }
@@ -220,10 +224,6 @@ class GameStorage {
 
     if (data.Level === null && data.Event === 22) {
       return this.update({}, true);
-    }
-
-    if (data.Level === null && data.Event === 17) {
-      location.reload(true);
     }
 
     this.prev = this.last;

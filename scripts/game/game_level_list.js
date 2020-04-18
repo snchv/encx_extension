@@ -91,6 +91,14 @@ class GameLevelListManager extends GameManager {
        $('li.refresh a')
        .attr('href', `${gameStorage.getCleanURL()}?level=${$(this).attr('level-number')}`);
 
+       // change mail level link
+       $('li.mail a')
+       .attr('href', `javascript:OpenScrollableWindow('/MailLevel.aspx?level=${$(this).attr('level-number')}&gid=${gameStorage.getGameId()}', 'MailLevel', 640, 420)`);
+
+       // change mail level link
+       $('li.print a')
+       .attr('href', `/gameengines/encounter/print/${gameStorage.getGameId()}/?level=${$(this).attr('level-number')}`);
+
        event.data.storage.changeLevel(
          $(this).attr('level-id'),
          $(this).attr('level-number')
