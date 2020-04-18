@@ -99,9 +99,16 @@ class GamePrepare extends GameManager {
     );
 
     // update script alert
-    $(".enext-alert").remove();
-    $("div.enext-block ul.leveldetails")
-      .prepend(this._levelScriptsAlert(storage, storage.getLevel()));
+    // $(".enext-alert").remove();
+    // $("div.enext-block ul.leveldetails")
+    //   .prepend(this._levelScriptsAlert(storage, storage.getLevel()));
+
+    $("div.enext-alert")
+    .replaceWith(
+      this._levelScriptsAlert(storage, storage.getLevel())
+    );
+
+
   }
 
   showLevelStat(event){
@@ -155,7 +162,7 @@ class GamePrepare extends GameManager {
               // }
 
               $("ul.userdetails").remove();
-              $(".enext-block")
+              $("div.enext-main")
               .append(
                 $("<ul>").addClass("userdetails")
                 .append(chrome.i18n.getMessage('titleUserLogin'))
@@ -163,6 +170,7 @@ class GamePrepare extends GameManager {
                 .append("  |  ")
                 .append(chrome.i18n.getMessage('titleUserTeam'))
                 .append(teaminfo[0])
+
               )
             }
           );
@@ -177,87 +185,115 @@ class GamePrepare extends GameManager {
       });
     });
 
+    $(function() {
+      $(".enext-copy-level-text span").click(function() {
+        // console.log(storage.getLevelText());
+        var result = storage.getLevelText();
+        var $tmp = $("<textarea>");
+        $("body").append($tmp);
+        $tmp.val( result.join("\n\n").replace(/<br\s*[\/]?>/gi, "\n") ).select();
+        document.execCommand("copy");
+        $tmp.remove();
+      });
+    });
+
+
     $(".enext-block").remove();
 
     return $("<div>").addClass("enext-block")
      .append(
-      $("<ul>").addClass("leveldetails")
+       $("<div>")
+       .addClass("enext-alert")
+     )
 
-      .append($("<li>").addClass("enext-level-timer")
-      .append(this._levelTimer(level)
+     .append(
+       $("<div>").addClass("enext-main")
+       .append(
+        $("<ul>").addClass("leveldetails")
+
+        .append($("<li>").addClass("enext-level-timer")
+        .append(this._levelTimer(level)
+          )
         )
-      )
 
-      .append($("<li>").addClass("enext-level-duration")
-      .append(this._levelDuration(level)
+        .append($("<li>").addClass("enext-level-duration")
+        .append(this._levelDuration(level)
+          )
         )
-      )
 
-      .append($("<li>").addClass("enext-bonuses-summary")
-      .append(this._levelBonusesSummary()
+        .append($("<li>").addClass("enext-bonuses-summary")
+        .append(this._levelBonusesSummary()
+          )
         )
-      )
 
-      .append(
-        $("<li>").addClass("enext-history")
         .append(
-          $("<span>")
+          $("<li>").addClass("enext-history")
+          .append(
+            $("<span>")
+            .append(
+              $("<a>")
+              .append(chrome.i18n.getMessage('menuHistory'))
+              .click(
+                {
+                  gamePrepare: this,
+                  storage: storage
+                },
+                this.showGameHistory
+              )
+            )
+            .before(
+              this._gameHistoryDialogTemplate()
+            )
+          )
+        )
+
+        .append(
+          $("<li>").addClass("enext-bonuses")
           .append(
             $("<a>")
-            .append(chrome.i18n.getMessage('menuHistory'))
-            .click(
-              {
-                gamePrepare: this,
-                storage: storage
-              },
-              this.showGameHistory
-            )
+              .append($("<i>"))
+              .append(
+                $("<span>").append(chrome.i18n.getMessage("menuBonuses"))
+              )
+              .attr("href", storage.getBonusesURL())
+              .attr("target", "_blank")
           )
-          .before(
-            this._gameHistoryDialogTemplate()
+        )
+
+        .append(
+          $("<li>").addClass("enext-userdetails")
+          .append(
+            $("<a>").addClass ('dashed toggle_userdetails')
+             .append(chrome.i18n.getMessage('titleUserInfo'))
           )
         )
       )
+     )
 
+    .append(
+      $("<div>")
+      .addClass("enext-copy-level-text")
       .append(
-        $("<li>").addClass("enext-bonuses")
-        .append(
-          $("<a>")
-            .append($("<i>"))
-            .append(
-              $("<span>").append(chrome.i18n.getMessage("menuBonuses"))
-            )
-            .attr("href", storage.getBonusesURL())
-            .attr("target", "_blank")
-        )
-      )
-
-      .append(
-        $("<li>").addClass("enext-userdetails")
-        .append(
-          $("<a>").addClass ('dashed toggle_userdetails')
-           .append(chrome.i18n.getMessage('titleUserInfo'))
-        )
+        $("<span>").css("font-size", "1.1em")
+        .attr('title', chrome.i18n.getMessage('titleCopyLevelText'))
+        .append('📋')
       )
     );
   }
 
   _levelScriptsAlert(storage, level) {
-    if (level.IsPassed) return "";
-
     function containsScript(text) {
       return text.includes('</script>');
     }
 
-    if (storage.getLevelText().some(containsScript))
-    return $("<li>").addClass("enext-alert")
+    return $("<div>").addClass("enext-alert")
             .append(
-              $("<span>").addClass("alerts")
-              .attr('title', chrome.i18n.getMessage('levelContainsScript'))
-              .append("⚠️")
+              (!level.IsPassed && storage.getLevelText().some(containsScript))
+                ? $("<span>").addClass("alerts")
+                 .attr('title', chrome.i18n.getMessage('levelContainsScript'))
+                 .append("⚠️")
+                : ""
             );
-
-    return "";
   }
 
   _levelTimer(level) {

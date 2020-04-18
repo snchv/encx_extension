@@ -261,14 +261,15 @@ class GameStorage {
   getLevelText(){
     var result = [];
 
+    this.last.Level.Messages.forEach((message) => {
+      result.push(message.MessageText);
+    });
+
+
     result.push(this.last.Level.Name);
 
     this.last.Level.Tasks.forEach((task) => {
       result.push(task.TaskTextFormatted);
-    });
-
-    this.last.Level.Messages.forEach((message) => {
-      result.push(message.MessageText);
     });
 
     this.last.Level.Sectors.forEach((sector) => {

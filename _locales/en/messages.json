@@ -464,6 +464,10 @@
     "message": "Team: "
   },
 
+  "titleCopyLevelText": {
+    "message": "Copy level source text to clipboard"
+  },
+
   "titleGameForum": {
     "message": "Discuss game"
   },

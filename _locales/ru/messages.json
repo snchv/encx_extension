@@ -464,6 +464,10 @@
     "message": "Команда: "
   },
 
+  "titleCopyLevelText": {
+    "message": "Копировать исходный текст уровня"
+  },
+
   "titleGameForum": {
     "message": "Обсуждение игры"
   },
