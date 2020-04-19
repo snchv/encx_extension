@@ -261,38 +261,45 @@ class GameStorage {
   getLevelText(){
     var result = [];
 
+    (this.last.Level.Messages.length > 0) ? result.push('\n\n<!--- MESSAGES -->') : "";
     this.last.Level.Messages.forEach((message) => {
       result.push(message.MessageText);
     });
 
+    this.last.Level.Name ? result.push('\n\n<!--- LEVEL NAME -->') : "";
+    result.push(`${this.last.Level.Number}: ${this.last.Level.Name}`);
 
-    result.push(this.last.Level.Name);
-
+    (this.last.Level.Tasks.length > 0) ? result.push('\n\n<!--- TASK TEXT -->') : "";
     this.last.Level.Tasks.forEach((task) => {
       result.push(task.TaskTextFormatted);
     });
 
-    this.last.Level.Sectors.forEach((sector) => {
-      result.push(sector.Name)
-    });
+    // this.last.Level.Sectors.forEach((sector) => {
+    //   result.push(sector.Name)
+    // });
 
+    (this.last.Level.Helps.length > 0) ? result.push('\n\n<!--- HELPS -->') : "";
     this.last.Level.Helps.forEach((help) => {
-      result.push(help.HelpText);
       result.push(help.PenaltyComment);
+      result.push(help.HelpText);
       result.push(help.PenaltyMessage);
     });
 
+    (this.last.Level.PenaltyHelps.length > 0) ? result.push('\n\n<!--- PENALTY HELPS -->') : "";
     this.last.Level.PenaltyHelps.forEach((penalty) => {
-      result.push(penalty.HelpText);
       result.push(penalty.PenaltyComment);
+      result.push(penalty.HelpText);
       result.push(penalty.PenaltyMessage);
     });
 
+    (this.last.Level.Bonuses.length > 0) ? result.push('\n\n<!--- BONUSES -->') : "";
     this.last.Level.Bonuses.forEach((bonus) => {
-      result.push(bonus.Name);
+      result.push(`${bonus.Number}: ${bonus.Name || ""}`);
       result.push(bonus.Task);
       result.push(bonus.Help);
     });
+
+    result.push('\n\n');
 
     return result.filter(Boolean);
   }
