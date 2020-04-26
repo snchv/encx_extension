@@ -129,14 +129,14 @@ class GameCodesManager extends GameManager {
 
     // Update input field block display
     if (storage.isBlocked()){
-      $("#input-blockage .countdown-timer backward")
-        .attr("seconds-left", storage.getBlockDuration());
+      $("#input-blockage .countdown-timer-blockage")
+        .attr("seconds-left", storage.getBlockDuration() + 1);
       $("#input-blockage").show();
       $("#answer-box #Answer").val("");
       $("#answer-box").hide();
     } else {
       // If block is inactive - hide block message
-      $("#input-blockage .countdown-timer backward").attr("seconds-left", -1);
+      $("#input-blockage .countdown-timer-blockage").attr("seconds-left", -1);
       $("#input-blockage").hide();
       $("#answer-box").show();
     }
@@ -197,7 +197,8 @@ class GameCodesManager extends GameManager {
 // do not show if answers are not restricted
         .css('display', function() {
           if ( !gameStorage.isBlockage() ) return 'none'
-          else return 'inline'
+          // else return 'inline'
+          else return ''
         })
       )
       .append(
@@ -233,17 +234,35 @@ class GameCodesManager extends GameManager {
 
   _blockMarkerTemplate(){
     return $("<div>")
-      .addClass("blocked")
-      .attr("id", "input-blockage")
+    .attr("id", "input-blockage")
       .append(
         $("<div>")
-          .append(chrome.i18n.getMessage("blockTimeoutMessage"))
-          .append(
-            $("<span>")
-              .addClass("countdown-timer")
-              .attr("seconds-left", -1)
-          )
+        .addClass("blocked")
+        .append(
+          $("<div>")
+            .append(chrome.i18n.getMessage("blockTimeoutMessage"))
+            .append(
+              $("<span>")
+                .addClass("countdown-timer-blockage")
+                .attr("seconds-left", -1)
+            )
+        )
       )
+      .append(
+        $("<div>")
+        .addClass("hint")
+        .addClass("blockageinfo")
+// do not show if answers are not restricted
+        .css('display', function() {
+          if ( !gameStorage.isBlockage() ) return 'none'
+          // else return 'inline'
+          else return ''
+        })
+      )
+      .append(
+        $("<div>").css('height','19px')
+      )
+
       .hide()
   }
 

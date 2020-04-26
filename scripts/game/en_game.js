@@ -208,6 +208,16 @@ function updateTimers(){
     $(this).attr("seconds-left", sec);
   });
 
+  $(".countdown-timer-blockage").each(function(index){
+    var diff = $(this).attr("seconds-step") || -1;
+    var sec = parseInt($(this).attr("seconds-left")) + parseInt(diff);
+
+    if (!sec) gameStorage.markForUpdate();
+
+    $(this).html(ENEXT.convertTime(sec,'common'));
+    $(this).attr("seconds-left", sec);
+  });
+
   gameStorage.updateIfNeeded();
 }
 

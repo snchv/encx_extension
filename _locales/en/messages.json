@@ -264,7 +264,7 @@
   },
 
   "blockTimeoutMessage": {
-    "message": "you can enter code in ",
+    "message": "You can enter code in ",
     "description": "Field blockage message"
   },
 
