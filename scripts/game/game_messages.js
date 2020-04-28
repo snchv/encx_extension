@@ -24,9 +24,10 @@ SOFTWARE.
 
 class GameMessagesManager extends GameManager {
   initialize(storage){
+    $(".globalmess").nextUntil(".aside").remove();
     $(".globalmess").remove();
     $(".header").after(
-      $("<p>")
+      $("<div>")
         .addClass("globalmess")
         .hide()
     );
