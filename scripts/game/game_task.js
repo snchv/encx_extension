@@ -333,6 +333,7 @@ class GameTaskManager extends GameManager {
   _taskTemplate(level){
     var result = $("<div>")
       .attr("id", "task")
+      // .append(encx_tpl.documentWriteOverride("#task div"));
       .append(encx_tpl.documentWriteOverride("#task p"));
     if (level.Tasks.length == 0) return result;
 
@@ -344,6 +345,7 @@ class GameTaskManager extends GameManager {
         )
       )
       .append(`<p>${level.Tasks[0].TaskTextFormatted}</p>`)
+      // .append(`<div>${level.Tasks[0].TaskTextFormatted}</div>`)
       .append($("<div>").addClass("spacer"))
       .append(encx_tpl.documentWriteRollback());
   }

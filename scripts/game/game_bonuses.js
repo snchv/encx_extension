@@ -239,6 +239,9 @@ class GameBonusManager extends GameManager {
         )
       )
       .append(this._timerTemplate(bonus.SecondsToStart))
+      .append(
+        $("<div>").addClass("spacer")
+      )
   }
 
   _bonusTemplate(bonus){
